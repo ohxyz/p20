@@ -1,0 +1,24 @@
+{
+  "name": "p20",
+  "version": "0.0.1",
+  "description": "HTML canvas project",
+  "scripts": {
+    "build": "webpack --config webpack.dev.js",
+    "dev": "webpack-dev-server --config webpack.dev.js --open"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@babel/core": "^7.11.0",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.11.0",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^4.2.0",
+    "sass": "^1.26.10",
+    "sass-loader": "^9.0.2",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
