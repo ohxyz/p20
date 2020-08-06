@@ -8,7 +8,7 @@ function testPoint( context ) {
     p1.color = 'blue';
     p1.draw( context );
 
-    const dist = Point.getDist( p1, { x:13, y:14 } );
+    const dist = Point.getDist( p1.x, p1.y, 13, 14 );
     console.log( '@@ dist', dist );
     
 }

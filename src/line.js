@@ -6,20 +6,78 @@ class Line {
     y1;
     x2;
     y2;
+    k;
     color = "#000000";
 
-    constructor( x1, y1, x2, y2 ) {
+    constructor() {
+
+        if ( arguments.length === 1 ) {
+
+            this.construct( arguments[0] );
+        }
+        else if ( arguments.length === 3 ) {
+
+            this.construct( {
+                x1: arguments[0], 
+                y1: arguments[1], 
+                k: arguments[2]
+            } );
+        }
+        else if ( arguments.length === 4 ) {
+
+            this.construct( { 
+                x1: arguments[0], 
+                y1: arguments[1], 
+                x2: arguments[2],
+                y2: arguments[3],
+            } );
+
+            this.k = this.calcK();
+        }
+        else {
+
+            throw "Error: Line arguments error!";
+        }
+    }
+
+    construct( { x1, y1, x2, y2, k } ) {
 
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        this.k = k;
     }
 
     // formula: y - y1 = k * ( x - x1 )
-    getK() {
+    calcK() {
 
         return ( this.y2 - this.y1 ) / ( this.x2 - this.x1 );
+    }
+
+    /**
+     * Caculate the point of intersection from a point on its P line
+     */ 
+    calcIFromPoint( aX, aY ) {
+
+        const kp = -1 / this.k;
+        // x of point of intersction
+        const xi = ( kp * aX - this.k * this.x1 + this.y1 - aY ) / ( kp - this.k );
+        const yi = this.k * ( xi - this.x1 ) + this.y1;
+        // round xi and yi
+        const rxi = Math.round( xi );
+        const ryi = Math.round( yi );
+
+        return new Point( rxi, ryi );
+    }
+
+    /**
+     * Caculate the distance between a point on its P line and the point of intersection
+     */ 
+    calcDistFromPoint( aX, aY ) {
+
+        const pi = this.calcIFromPoint( aX, aY );
+        return Point.getDist( aX, aY, pi.x, pi.y );
     }
 
     getDist() {
@@ -29,24 +87,66 @@ class Line {
 
     draw( context ) {
 
-        context.beginPath();
-        context.moveTo( this.x1, this.y1 );
-        context.lineTo( this.x2, this.y2 );
-        context.strokeStyle = this.color;
-        context.stroke();
+        Line.drawLine( context, this.x1, this.y1, this.x2, this.y2, this.color );
     }
 
-    // Get point of intersection. e.g. { x: 10, y: 20 }
-    static getI( line1, line2 ) {
+    drawByK( context ) {
 
-        const k1 = line1.getK();
-        const k2 = line2.getK();
+        Line.drawLineByK( context, this.x1, this.y1, this.k, this.color );
+    }
+
+    drawPLine( context, color ) {
+
+        // k of perpendicular line
+        const kp = -1 / this.k;
+        Line.drawLineByK( context, this.x1, this.y1, kp, color );
+    }
+
+    drawPLineByPoint( aContext, aX, aY, aColor ) {
+
+        const point = this.calcIFromPoint( aX, aY );
+
+        Line.drawLine( aContext, point.x, point.y, aX, aY, aColor );
+    }
+
+    static drawLineByK( context, x1, y1, k, color ) {
+
+        if ( x1 === undefined || y1 === undefined || k === undefined ) {
+
+            throw "Error: At least one of x1, y1, k not defined!";
+        }
+
+        const x2 = ( k * x1 - y1 ) / k;
+        const y2 = 0;
+
+        Line.drawLine( context, x1, y1, x2, y2, color );
+    }
+
+    static drawLine( context, x1, y1, x2, y2, color ) {
+
+        if ( x1 === undefined || y1 === undefined || x2 === undefined || y2 === undefined ) {
+
+            throw "Error: At least one of x1, y1, x2, y2 not defined!";
+        }
+
+        context.beginPath();
+        context.moveTo( x1, y1 );
+        context.lineTo( x2, y2 );
+        context.strokeStyle = color;
+        context.stroke();
+    } 
+
+    // Get point of intersection. e.g. { x: 10, y: 20 }
+    static calcI( line1, line2 ) {
         // x1, y1 of line1
         const x1 = line1.x1;
         const y1 = line1.y1;
+        const k1 = line1.k;
         // x1, y1 of line2
         const x1a = line2.x1;
         const y1a = line2.y1;
+        const k2 = line2.k;
+        
         // result
         const x = Math.round( ( k1 * x1 - k2 * x1a + y1a - y1 ) / ( k1 - k2 ) );
         const y = Math.round( k1 * ( x - x1 ) + y1 );
@@ -54,27 +154,30 @@ class Line {
         return { x, y };
     }
 
-    static doesCross( line1, line2 ) {
+    /**
+     * @returns {object} Pointer of intersection, otherwise null
+     */
+    static getI( line1, line2 ) {
 
         // point of itersection
-        const i = Line.getI( line1, line2 );
+        const i = Line.calcI( line1, line2 );
 
         for ( let line of [ line1, line2 ] ) {
 
             const dist = line.getDist();
 
-            const distOfIToX1Y1 = Point.getDist( i, { x: line.x1, y: line.y1 } );
-            const distOfIToX2Y2 = Point.getDist( i, { x: line.x2, y: line.y2 } );
+            const distOfIToX1Y1 = Point.getDist( i.x, i.y, line.x1, line.y1 );
+            const distOfIToX2Y2 = Point.getDist( i.x, i.y, line.x2, line.y2 );
 
-            console.log( dist, distOfIToX1Y1, distOfIToX2Y2 )
+            // console.log( dist, distOfIToX1Y1, distOfIToX2Y2 )
 
             if ( distOfIToX1Y1 > dist || distOfIToX2Y2 > dist ) {
 
-                return false;
+                return null;
             }
         }
 
-        return true;
+        return i;
     }
 }
 

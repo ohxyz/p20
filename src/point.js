@@ -15,9 +15,9 @@ class Point {
         context.fillRect( this.x, this.y, 1, 1 );
     }
 
-    static getDist( p1, p2 ) {
+    static getDist( x1, y1, x2, y2 ) {
 
-        return Math.round( Math.pow( Math.pow( (p1.x - p2.x), 2 ) + Math.pow( (p1.y - p2.y), 2 ), 0.5 ) );
+        return Math.round( Math.pow( Math.pow( (x1 - x2), 2 ) + Math.pow( (y1 - y2), 2 ), 0.5 ) );
     }
 }
 
