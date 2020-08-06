@@ -10,13 +10,13 @@ function collideLineLine( line1, line2 ) {
 }
 
 /**
- * @returns {bool} true if collides, otherwise false
+ * @returns {boolean} Returns true if collides, otherwise false
  */
 function collideCircleLine( circle, line ) {
 
     // Vertical distance from center of cirle to line
     const vd = line.calcDistFromPoint( circle.x, circle.y );
-    return vd < circle.r;
+    return vd <= circle.r;
 }
 
 export {

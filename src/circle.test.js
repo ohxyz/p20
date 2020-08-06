@@ -6,7 +6,6 @@ function testCircle( context ) {
 
     const c1 = new Circle( 100, 100, 44 );
     c1.draw( context );
-    
 }
 
 export { testCircle };
