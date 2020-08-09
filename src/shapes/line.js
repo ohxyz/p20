@@ -8,6 +8,7 @@ class Line {
     y2;
     k;
     color = "#000000";
+    lineWidth = 1.0;
 
     constructor() {
 
@@ -85,31 +86,44 @@ class Line {
         return Point.getDist( { x: this.x1, y: this.y1 }, { x: this.x2, y: this.y2 } );
     }
 
-    draw( context ) {
+    draw( context, color, width ) {
 
-        Line.drawLine( context, this.x1, this.y1, this.x2, this.y2, this.color );
+        Line.drawLine( context, this.x1, this.y1, this.x2, this.y2, color, width );
     }
 
-    drawByK( context ) {
+    drawByK( context, color, width ) {
 
-        Line.drawLineByK( context, this.x1, this.y1, this.k, this.color );
+        Line.drawLineByK( context, this.x1, this.y1, this.k, color, width );
     }
 
-    drawPLine( context, color ) {
+    drawPLine( context, color, width ) {
 
         // k of perpendicular line
         const kp = -1 / this.k;
-        Line.drawLineByK( context, this.x1, this.y1, kp, color );
+        Line.drawLineByK( context, this.x1, this.y1, kp, color, width );
     }
 
-    drawPLineByPoint( aContext, aX, aY, aColor ) {
+    drawPLineByPoint( aContext, aX, aY, aColor, aWidth ) {
 
         const point = this.calcIFromPoint( aX, aY );
 
-        Line.drawLine( aContext, point.x, point.y, aX, aY, aColor );
+        Line.drawLine( aContext, point.x, point.y, aX, aY, aColor, aWidth );
     }
 
-    static drawLineByK( context, x1, y1, k, color ) {
+    /**
+     * Draw a vertical line with minium anti-aliasing effect by ImageData
+     */
+    static drawVLine( context, x, y, length, dash, color ) {
+
+        Point.drawRect( context, x, y, 1, length, dash, color );
+    }
+
+    static drawHLine( context, x, y, length, dash, color ) {
+
+        Point.drawRect( context, x, y, length, 1, dash, color );
+    }
+
+    static drawLineByK( context, x1, y1, k, color, width ) {
 
         if ( x1 === undefined || y1 === undefined || k === undefined ) {
 
@@ -119,16 +133,19 @@ class Line {
         const x2 = ( k * x1 - y1 ) / k;
         const y2 = 0;
 
-        Line.drawLine( context, x1, y1, x2, y2, color );
+        Line.drawLine( context, x1, y1, x2, y2, color, width );
     }
 
-    static drawLine( context, x1, y1, x2, y2, color ) {
+    static drawLine( context, x1, y1, x2, y2, color, width ) {
 
         if ( x1 === undefined || y1 === undefined || x2 === undefined || y2 === undefined ) {
-
             throw "Error: At least one of x1, y1, x2, y2 not defined!";
         }
 
+        width = typeof width === 'undefined' ? 1.0 : width;
+        color = typeof color === 'undefined' ? '#000000' : color;
+
+        context.lineWidth = width;
         context.beginPath();
         context.moveTo( x1, y1 );
         context.lineTo( x2, y2 );

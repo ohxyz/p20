@@ -8,14 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
-    <div id="top-bar" class="__top-bar">
-        <!-- Buttons are appended here -->
-    </div>
-    <div id="second-bar" class="__second-bar">
-        <div id="info">X: 0, Y: 0</div>
-    </div>
-    <div id="main">
-        <canvas id="canvas" class="__canvas"></canvas>
+    <div id="app" class="app">
+        <div id="tool-bar" class="tool-bar">
+            <div id="buttons"></div>
+            <div id="info">X: 0, Y: 0</div>
+        </div>
+        <div id="comp-panel" class="comp-panel"></div>
+        <div id="prop-panel" class="prop-panel"></div>
+        <div id="status-bar" class="status-bar"></div>
+        <div id="main-panel" class="main-panel">
+            <canvas id="canvas" class="canvas"></canvas>
+        </div>
     </div>
     <script src="bundle.js"></script>
 </body>

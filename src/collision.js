@@ -1,5 +1,4 @@
-import { Line } from './line';
-import { Circle } from './circle';
+import { Line, Circle } from './shapes';
 
 /**
  * @returns {object} Point of intersection, otherwise null

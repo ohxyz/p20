@@ -1,20 +1,21 @@
 import '../scss/index.scss';
-import { foo } from './foo';
-import { testPoint } from './point.test';
-import { testLine } from './line.test';
-import { testCircle } from './circle.test';
+import { testPoint } from './shapes/point.test';
+import { testLine } from './shapes/line.test';
+import { testCircle } from './shapes/circle.test';
 import { testCollision } from './collision.test';
+import { testCanvas } from './canvas.test';
+import { testMainPanel } from './main-panel.test';
+import { MainPanel } from './main-panel';
+import { Canvas } from './canvas';
 
 /* Globals ****************************************************************************************/
 
 const infoElem = document.getElementById( 'info' );
-const canvasElem = document.getElementById( 'canvas' );
-const canvasContext = canvasElem.getContext( '2d' );
 
-canvasElem.width = 500;
-canvasElem.height = 500;
+const canvas = new Canvas( { id: 'canvas', width: 500, height: 500 } );
+const mainPanel = new MainPanel();
 
-canvasElem.addEventListener( 'mousemove', event => {
+canvas.dom().addEventListener( 'mousemove', event => {
 
     const canvasX = event.offsetX;
     const canvasY = event.offsetY;
@@ -22,13 +23,22 @@ canvasElem.addEventListener( 'mousemove', event => {
 
 } );
 
+
 const modules = {
 
+    'main-panel': testMainPanel,
+    'canvas': testCanvas,
     'point': testPoint,
     'line': testLine,
     'circle': testCircle,
-    'collision': testCollision
-}
+    'collision': testCollision,
+};
+
+const globalContext = {
+
+    canvas: canvas,
+    mainPanel: mainPanel
+};
 
 /* Main *******************************************************************************************/
 
@@ -36,10 +46,6 @@ init();
 
 
 /* Functions **************************************************************************************/
-function clearCanvas() {
-
-    canvasContext.clearRect( 0, 0, canvasElem.width, canvasElem.height );
-}
 
 function createTestSuite( moduleName, moduleTestFn ) {
 
@@ -48,12 +54,12 @@ function createTestSuite( moduleName, moduleTestFn ) {
     button.innerText = 'Test ' + moduleName;
     button.addEventListener( 'click', () => {
 
-        clearCanvas();
+        canvas.clear();
         localStorage.setItem( 'test', moduleName );
-        moduleTestFn( canvasContext );
+        moduleTestFn( globalContext );
     } )
 
-    const buttonContainer = document.getElementById( 'top-bar' );
+    const buttonContainer = document.getElementById( 'buttons' );
     buttonContainer.appendChild( button );
 }
 
@@ -66,9 +72,8 @@ function init() {
         createTestSuite( testName, testFn );
 
         if ( testItem === testName ) {
-
-            testFn( canvasContext );
+            
+            testFn( globalContext );
         }
     }
-
 }
