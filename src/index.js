@@ -5,40 +5,51 @@ import { testCircle } from './shapes/circle.test';
 import { testCollision } from './collision.test';
 import { testCanvas } from './canvas.test';
 import { testMainPanel } from './main-panel.test';
+import { testDnrManager, testDnrManagerTearDown } from './dnr-manager.test';
 import { MainPanel } from './main-panel';
 import { Canvas } from './canvas';
+import { $q } from './utils';
 
 /* Globals ****************************************************************************************/
 
 const infoElem = document.getElementById( 'info' );
 
 const canvas = new Canvas( { id: 'canvas', width: 500, height: 500 } );
-const mainPanel = new MainPanel();
+const mainPanel = new MainPanel( { canvas: canvas });
+
+// mainPanel.addCanvas( canvas );
 
 canvas.dom().addEventListener( 'mousemove', event => {
 
     const canvasX = event.offsetX;
     const canvasY = event.offsetY;
     infoElem.innerText = `X: ${canvasX}, Y: ${canvasY}`;
-
 } );
 
+$q( '#update-main-form' ).addEventListener( 'submit', event => {
+
+    event.preventDefault();
+    const w = $q( '#main-width' ).value;
+    const h = $q( '#main-height' ).value;
+
+    mainPanel.update( { width: w, height: h } )
+;} )
 
 const modules = {
 
+    'dnr-manager': testDnrManager,
+    'dnr-manager-clear': testDnrManagerTearDown,
     'main-panel': testMainPanel,
     'canvas': testCanvas,
-    'point': testPoint,
-    'line': testLine,
-    'circle': testCircle,
-    'collision': testCollision,
+    // 'point': testPoint,
+    // 'line': testLine,
+    // 'circle': testCircle,
+    // 'collision': testCollision,
 };
 
-const globalContext = {
+globalThis.canvas = canvas;
+globalThis.mainPanel = mainPanel;
 
-    canvas: canvas,
-    mainPanel: mainPanel
-};
 
 /* Main *******************************************************************************************/
 
@@ -56,7 +67,7 @@ function createTestSuite( moduleName, moduleTestFn ) {
 
         canvas.clear();
         localStorage.setItem( 'test', moduleName );
-        moduleTestFn( globalContext );
+        moduleTestFn();
     } )
 
     const buttonContainer = document.getElementById( 'buttons' );
@@ -73,7 +84,7 @@ function init() {
 
         if ( testItem === testName ) {
             
-            testFn( globalContext );
+            testFn();
         }
     }
 }

@@ -17,13 +17,15 @@ class Canvas {
         this.width = width;
         this.height = height;
         this.elementId = id;
-        this.element = document.getElementById( this.elementId );
+        this.element = $ce( 'canvas' );
         this.context = this.element.getContext( '2d' );
 
         this.element.width = width;
         this.element.height = height;
         this.element.style.width = width + 'px';
         this.element.style.height = height + 'px';
+        this.element.style.border = "1px solid black";
+        this.element.style.zIndex = 1;
     }
 
     drawGridLines( aSpacing=20, color='#000000' ) {

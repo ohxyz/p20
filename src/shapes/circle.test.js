@@ -5,7 +5,7 @@ function testCircle( g ) {
     console.log( 'Test Cirlcle' );
 
     const c1 = new Circle( 100, 100, 44 );
-    c1.draw( g.canvas.context, 'yellow', 1 );
+    c1.draw( globalThis.canvas.context, 'blue', 1 );
 }
 
 export { testCircle };

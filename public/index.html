@@ -11,13 +11,20 @@
     <div id="app" class="app">
         <div id="tool-bar" class="tool-bar">
             <div id="buttons"></div>
+            <div id="others">
+                <form id="update-main-form">
+                    <input id="main-width" type="text" placeholder="width" />
+                    <input id="main-height" type="text" placeholder="height" />
+                    <button type="submit" id="update-main-button">Update main</button>
+                </form>
+            </div>
             <div id="info">X: 0, Y: 0</div>
         </div>
         <div id="comp-panel" class="comp-panel"></div>
         <div id="prop-panel" class="prop-panel"></div>
         <div id="status-bar" class="status-bar"></div>
-        <div id="main-panel" class="main-panel">
-            <canvas id="canvas" class="canvas"></canvas>
+        <div id="main-container" class="main-container">
+            <div id="main-panel" class="main-panel"></div>
         </div>
     </div>
     <script src="bundle.js"></script>

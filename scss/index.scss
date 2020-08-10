@@ -5,6 +5,10 @@
     --black20: #00000020;    
     --black30: #00000030;
     --black50: #00000050;
+    --tool-bar-height: 66px;
+    --comp-panel-width: 66px;
+    --prop-panel-width: 77px;
+    --status-bar-height: 44px;
 }
 
 body {
@@ -34,7 +38,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 50px;
+    height: var(--tool-bar-height);
     z-index: 100;
 }
 
@@ -45,7 +49,7 @@ body {
     top: 100px;
     left: 0;
     bottom: 100px;
-    width: 100px;
+    width: var(--comp-panel-width);
     z-index: 100;
 }
 
@@ -56,7 +60,7 @@ body {
     top: 100px;
     right: 0;
     bottom: 100px;
-    width: 100px;
+    width: var(--prop-panel-width);
     z-index: 100;
 }
 
@@ -67,26 +71,16 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    height: 50px;
+    height: var(--status-bar-height);
     z-index: 100;
 }
 
-.main-panel {
+.main-container {
 
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-}
-
-.canvas {
-
-    // position: absolute;
-    // top: 100px;
-    // left: 100px;
+    top: var(--tool-bar-height);
+    left: var(--comp-panel-width);
+    bottom: var(--status-bar-height);
+    right: var(--prop-panel-width);
+    overflow: auto;
 }
