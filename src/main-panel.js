@@ -3,6 +3,12 @@ import { DnrManager } from './dnr-manager';
 
 class MainPanel {
 
+    canvas;
+    element;
+    chm;
+    prevCanvasRect = null;
+    currCanvasRect = null;
+
     constructor( args={} ) {
 
         const {
@@ -21,12 +27,13 @@ class MainPanel {
         this.element.style.backgroundColor = '#ff000011';
         this.element.style.margin = '0 auto';
 
-        this.addCanvas( canvas );
+        this.canvas = canvas;
+        this.element.appendChild( canvas.dom() );
+
+        this.positionCanvas();
 
         // component holder manager;
         this.chm = new DnrManager( { container: this.element } );
-        this.prevCanvasRect = null;
-        this.currCanvasRect = null;
 
         window.addEventListener( 'resize', this.handleResize.bind(this) );
     }
@@ -55,15 +62,6 @@ class MainPanel {
     getSelfRect() {
 
         return this.element.getBoundingClientRect();
-    }
-
-    addCanvas( canvas ) {
-
-        this.canvas = canvas;
-        this.element.appendChild( canvas.dom() );
-
-        this.positionCanvas();
-        this.prevCanvasRect = this.canvas.dom().getBoundingClientRect();
     }
 
     positionCanvas() {
@@ -112,15 +110,15 @@ class MainPanel {
         }
     }
 
-    handleResize() {
+    reposition() {
 
         this.positionCanvas();
         this.positionComponentHolders();
+    }
 
-        // console.log( '@@ prev', this.prevCanvasRect );
-        // console.log( '@@ curr', this.currCanvasRect );
+    handleResize( event ) {
 
-        this.prevCanvasRect = this.currCanvasRect;
+        // this.reposition();
     }
 
     resizeOthers() {

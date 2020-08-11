@@ -1,4 +1,17 @@
+import { isInRect } from './utils';
+
 class DnrManager {
+
+    containerElem;
+    dnrs = [];
+    activeDnr = null;
+    // lastHoveredDnr is different from activeDnr. 
+    // lastHoveredDnr is update cursor styles when cursor is over the Dnr's borders
+    // Whem mouse moved out of the dnr, it is still calculating the positon of the mouse
+    lastHoveredDnr = null;
+    // Cursor coords of last movement
+    lastX = 0;
+    lastY = 0;
 
     constructor( { container } ) {
 
@@ -7,11 +20,6 @@ class DnrManager {
         }
 
         this.containerElem = container;
-        this.dnrs = [];
-        this.activeDnrElem = null;
-        // Cursor mouse since last movement
-        this.prevX = 0;
-        this.prevY = 0;
 
         document.addEventListener( 'mousedown', this.handleMouseDown.bind(this) );
         document.addEventListener( 'mouseup', this.handleMouseUp.bind(this) );
@@ -24,6 +32,18 @@ class DnrManager {
         this.containerElem.appendChild( dnr.dom() );
     }
 
+    findDnrByElement( elem ) {
+
+        for ( const dnr of this.dnrs ) {
+
+            if ( dnr.dom() === elem ) {
+                return dnr;
+            }
+        }
+
+        return null;
+    }
+
     getAll() {
 
         return this.dnrs;
@@ -33,47 +53,150 @@ class DnrManager {
 
         // console.log( '@@ mouse down', event.target  );
 
-        if ( event.target.getAttribute( 'dnr-state' ) === 'static' ) {
+        // Prevent default that conflicts the dragging behaviour
+        event.preventDefault();
 
-            // console.log( 'dnr' );
-            this.activeDnrElem = event.target;
-            this.activeDnrElem.setAttribute( 'dnr-state', 'drag' );
+        const dnr = this.findDnrByElement( event.target );
 
-            this.prevX = event.clientX;
-            this.prevY = event.clientY;
+        if ( dnr && dnr.getState() === 'static' ) {
+
+            this.activeDnr = dnr;
+
+            const cursorX = event.clientX;
+            const cursorY = event.clientY;
+
+            const borderRects = this.lastHoveredDnr.getBorderRects();
+
+            if ( isInRect( cursorX, cursorY, borderRects.top ) ) {
+                this.activeDnr.setState( 'resize-top' );
+            }
+            else if ( isInRect( cursorX, cursorY, borderRects.right ) ) {
+                this.activeDnr.setState( 'resize-right' );
+            }
+            else if ( isInRect( cursorX, cursorY, borderRects.bottom) ) {
+                this.activeDnr.setState( 'resize-bottom' );
+            }
+            else if ( isInRect( cursorX, cursorY, borderRects.left) ) {
+                this.activeDnr.setState( 'resize-left' );
+            }
+            else {
+                this.activeDnr.setState( 'drag' );
+            }
+
         }
+
+        this.lastX = event.clientX;
+        this.lastY = event.clientY;
     }
 
     handleMouseMove( event ) {
 
-        // console.log( '@@ mouse move', event.target  );
+        const dnr = this.findDnrByElement( event.target );
 
-        if ( this.activeDnrElem && this.activeDnrElem.getAttribute( 'dnr-state', 'drag' ) ) {
+        if ( dnr ) {
 
-            // console.log( 'drag' )
+            this.lastHoveredDnr = dnr;
+        }
 
-            const distX = event.clientX - this.prevX;
-            const distY = event.clientY - this.prevY;
+        if ( this.lastHoveredDnr ) {
 
-            const x = parseInt( this.activeDnrElem.style.left );
-            const y = parseInt( this.activeDnrElem.style.top );
+            const cursorX = event.clientX;
+            const cursorY = event.clientY;
+            const borderRects = this.lastHoveredDnr.getBorderRects();
 
-            this.activeDnrElem.style.top = y + distY + 'px' ;
-            this.activeDnrElem.style.left = x + distX + 'px';
+            if ( isInRect( cursorX, cursorY, borderRects.top ) ) {
+                document.body.style.cursor = 'n-resize';
+            }
+            else if ( isInRect( cursorX, cursorY, borderRects.right ) ) {
+                document.body.style.cursor = 'e-resize';
+            }
+            else if ( isInRect( cursorX, cursorY, borderRects.bottom ) ) {
+                document.body.style.cursor = 's-resize';
+            }
+            else if ( isInRect( cursorX, cursorY, borderRects.left ) ) {
+                document.body.style.cursor = 'w-resize';
+            }
+            else {
+                document.body.style.cursor = 'auto';
+            }
+        }
 
-            this.prevX = event.clientX;
-            this.prevY = event.clientY;
+        if ( this.activeDnr ) {
+
+            if ( this.activeDnr.getState() === 'drag' ) {
+                this.handleDnrMove( event );
+            }
+            else if ( this.activeDnr.getState() === 'resize-top' ) {
+                this.handleDnrResize( 'top' );
+            }
+            else if ( this.activeDnr.getState() === 'resize-right' ) {
+                this.handleDnrResize( 'right' );
+            }
+            else if ( this.activeDnr.getState() === 'resize-bottom' ) {
+                this.handleDnrResize( 'bottom' );
+            }
+            else if ( this.activeDnr.getState() === 'resize-left' ) {
+                this.handleDnrResize( 'left' );
+            }
         }
     }
 
+    handleDnrResize( direction ) {
+
+        const dnrElem = this.activeDnr.dom();
+        const distX = event.clientX - this.lastX;
+        const distY = event.clientY - this.lastY;
+        const top = parseFloat( dnrElem.style.top );
+        const left = parseFloat( dnrElem.style.left );
+        const width = parseFloat( dnrElem.style.width );
+        const height = parseFloat( dnrElem.style.height );
+
+        if ( direction === 'top' ) {
+
+            dnrElem.style.top = top + distY + 'px';
+            dnrElem.style.height = height - distY + 'px';
+        }
+        else if ( direction === 'right' ) {
+
+            dnrElem.style.width = width + distX + 'px';
+        }
+        else if ( direction === 'bottom' ) {
+
+            dnrElem.style.height = height + distY + 'px';
+        }
+        else if ( direction === 'left' ) {
+
+            dnrElem.style.left = left + distX + 'px';
+            dnrElem.style.width = width - distX + 'px';
+        }
+
+        this.lastX = event.clientX;
+        this.lastY = event.clientY;
+
+    }
+
+    handleDnrMove( event ) {
+
+        const distX = event.clientX - this.lastX;
+        const distY = event.clientY - this.lastY;
+        const elem = this.activeDnr.dom();
+
+        const x = parseFloat( elem.style.left );
+        const y = parseFloat( elem.style.top );
+
+        elem.style.top = y + distY + 'px' ;
+        elem.style.left = x + distX + 'px';
+
+        this.lastX = event.clientX;
+        this.lastY = event.clientY;
+    }
+
     handleMouseUp( event ) {
-        // console.log( '@@ mouse up' );
-        // this.isDragStarted = false;
 
-        if ( this.activeDnrElem && this.activeDnrElem.getAttribute( 'dnr-state', 'drag' ) ) {
+        if ( this.activeDnr ) {
 
-            this.activeDnrElem.setAttribute( 'dnr-state', 'static' );
-            this.activeDnrElem = null;
+            this.activeDnr.setState( 'static' );
+            this.activeDnr = null;
         }
     }
 

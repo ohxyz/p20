@@ -17,13 +17,23 @@ const infoElem = document.getElementById( 'info' );
 const canvas = new Canvas( { id: 'canvas', width: 500, height: 500 } );
 const mainPanel = new MainPanel( { canvas: canvas });
 
-// mainPanel.addCanvas( canvas );
+document.addEventListener( 'mousemove', event => {
 
-canvas.dom().addEventListener( 'mousemove', event => {
+    if ( event.target === canvas.dom() ) {
 
-    const canvasX = event.offsetX;
-    const canvasY = event.offsetY;
-    infoElem.innerText = `X: ${canvasX}, Y: ${canvasY}`;
+        const canvasX = event.offsetX;
+        const canvasY = event.offsetY;
+
+        infoElem.innerText = `Canvas X: ${canvasX}, Canvas Y: ${canvasY}`;
+    }
+    else {
+
+        const x = event.clientX;
+        const y = event.clientY;
+
+        infoElem.innerText = `Client X: ${x}, Client Y: ${y}`;
+    }
+
 } );
 
 $q( '#update-main-form' ).addEventListener( 'submit', event => {
@@ -32,7 +42,8 @@ $q( '#update-main-form' ).addEventListener( 'submit', event => {
     const w = $q( '#main-width' ).value;
     const h = $q( '#main-height' ).value;
 
-    mainPanel.update( { width: w, height: h } )
+    mainPanel.update( { width: w, height: h } );
+    mainPanel.reposition();
 ;} )
 
 const modules = {

@@ -18,6 +18,11 @@ function genRandomString() {
     return Math.random().toString( 36 ).slice( 2 );
 }
 
+function isInRect( x, y, rect ) {
+
+    return ( x >= rect.x && x <= rect.x + rect.width ) && ( y >= rect.y && y <= rect.y + rect.height );
+}
+
 /**
  * Convert any color string to array of RGBA values
  * https://gist.github.com/oriadam/396a4beaaad465ca921618f2f2444d49
@@ -77,5 +82,6 @@ export {
     $qa,
     $ce,
     $cf,
-    genRandomString
+    genRandomString,
+    isInRect
 };

@@ -6,7 +6,7 @@
     --black30: #00000030;
     --black50: #00000050;
     --tool-bar-height: 66px;
-    --comp-panel-width: 66px;
+    --comp-panel-width: 100px;
     --prop-panel-width: 77px;
     --status-bar-height: 44px;
 }
@@ -83,4 +83,8 @@ body {
     bottom: var(--status-bar-height);
     right: var(--prop-panel-width);
     overflow: auto;
+}
+
+.dnr {
+
 }
