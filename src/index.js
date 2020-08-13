@@ -6,33 +6,40 @@ import { testCollision } from './collision.test';
 import { testCanvas } from './canvas.test';
 import { testMainPanel } from './main-panel.test';
 import { testDnrManager, testDnrManagerTearDown } from './dnr-manager.test';
+import { testApp } from './app.test';
+import { testUtils } from './utils.test';
 import { MainPanel } from './main-panel';
 import { Canvas } from './canvas';
+import { CompPanel } from './comp-panel';
+import { App } from './app';
 import { $q } from './utils';
 
 /* Globals ****************************************************************************************/
 
-const infoElem = document.getElementById( 'info' );
+const compPanel = new CompPanel();
 
 const canvas = new Canvas( { id: 'canvas', width: 500, height: 500 } );
 const mainPanel = new MainPanel( { canvas: canvas });
+const app = new App( { mainPanel });
 
 document.addEventListener( 'mousemove', event => {
 
-    if ( event.target === canvas.dom() ) {
+    const infoElem = document.getElementById( 'info' );
 
-        const canvasX = event.offsetX;
-        const canvasY = event.offsetY;
+    // if ( event.target === canvas.dom() ) {
 
-        infoElem.innerText = `Canvas X: ${canvasX}, Canvas Y: ${canvasY}`;
-    }
-    else {
+    //     const canvasX = event.offsetX;
+    //     const canvasY = event.offsetY;
 
-        const x = event.clientX;
-        const y = event.clientY;
+    //     infoElem.innerText = `Canvas X: ${canvasX}, Canvas Y: ${canvasY}`;
+    //     return;
+    // }
 
-        infoElem.innerText = `Client X: ${x}, Client Y: ${y}`;
-    }
+    const x = event.clientX;
+    const y = event.clientY;
+
+    infoElem.innerText = `Client X: ${x}, Client Y: ${y}`;
+
 
 } );
 
@@ -50,8 +57,10 @@ const modules = {
 
     'dnr-manager': testDnrManager,
     'dnr-manager-clear': testDnrManagerTearDown,
+    'test-app': testApp,
     'main-panel': testMainPanel,
     'canvas': testCanvas,
+    'utils': testUtils
     // 'point': testPoint,
     // 'line': testLine,
     // 'circle': testCircle,
@@ -60,6 +69,7 @@ const modules = {
 
 globalThis.canvas = canvas;
 globalThis.mainPanel = mainPanel;
+globalThis.app = app;
 
 
 /* Main *******************************************************************************************/

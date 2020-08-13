@@ -6,12 +6,12 @@ function $qa( selectors ) {
     return document.querySelectorAll( selectors );
 }
 
-function $ce( tagName, options ) {
-    return document.createElement( tagName, options );
+function $c( tagString ) {
+    return document.createRange().createContextualFragment( tagString.trim() ).firstChild;
 }
 
-function $cf( tagString ) {
-    return document.createRange().createContextualFragment( tagString );
+function $ce( tagName, options ) {
+    return document.createElement( tagName, options );
 }
 
 function genRandomString() {
@@ -73,7 +73,7 @@ function rgba( color ) {
 window.$q = $q;
 window.$qa = $qa;
 window.$ce = $ce;
-window.$cf = $cf;
+window.$c = $c;
 
 export {
 
@@ -81,7 +81,7 @@ export {
     $q,
     $qa,
     $ce,
-    $cf,
+    $c,
     genRandomString,
     isInRect
 };

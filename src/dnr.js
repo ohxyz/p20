@@ -23,13 +23,20 @@ class Dnr {
             width = 100,
             height = 100,
             backgroundColor = '#00000030',
+            text = '',
             
         } = args;
 
         this.id = id;
         // console.log( '@@ container', this.container )
-        this.element = $ce( 'div' );
-        this.element.classList.add( 'dnr' );
+
+        this.element = $c(`
+            <div class="dnr">
+                <button class="dnr__close">x</button>
+                <div class="dnr__content">${text}</div>
+            </div>
+        `);
+
         this.element.style.width = width + 'px';
         this.element.style.height = height + 'px';
         this.element.style.position = 'absolute';
@@ -37,15 +44,6 @@ class Dnr {
         this.element.style.left = x + 'px';
         this.element.style.backgroundColor = backgroundColor;
         this.element.setAttribute( 'dnr-state', 'static' );
-
-        // debug
-        this.element.style.borderTop = '10px solid green';
-        this.element.style.borderRight = '20px solid green';
-        this.element.style.borderBottom = '30px solid green';
-        this.element.style.borderLeft = '40px solid green';
-        this.element.style.zIndex = 1000;
-        // this.element.style.cursor = 'n-resize';
-
     }
 
     getState() {
@@ -109,6 +107,11 @@ class Dnr {
         };
     }
 
+    remove() {
+
+        this.element.remove();
+    }
+
     handleClick() {
 
         console.log( '@@ click', this.id );
@@ -117,6 +120,11 @@ class Dnr {
     dom() {
 
         return this.element;
+    }
+
+    static isCloseButton( element ) {
+
+        return element.className.includes( 'dnr__close' );
     }
 }
 

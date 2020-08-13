@@ -29,17 +29,19 @@ body {
     right: 0;
     bottom: 0;
     z-index: 1;
+    // Avoid scollbars when drag a Dnr
+    overflow: hidden;
 }
 
 .tool-bar {
 
     position: absolute;
-    background-color: var(--black10);
+    background-color: #cccccc;
     top: 0;
     left: 0;
     right: 0;
     height: var(--tool-bar-height);
-    z-index: 100;
+    z-index: 1000;
 }
 
 .comp-panel {
@@ -67,12 +69,12 @@ body {
 .status-bar {
 
     position: absolute;
-    background-color: var(--black10);   
+    background-color: #cccccc;   
     left: 0;
     right: 0;
     bottom: 0;
     height: var(--status-bar-height);
-    z-index: 100;
+    z-index: 1000;
 }
 
 .main-container {
@@ -85,6 +87,24 @@ body {
     overflow: auto;
 }
 
+.comp {
+
+    margin: 5px;
+    background-color: #0000ff50;
+}
+
 .dnr {
 
+    $border-width: 5px;
+
+    position: relative;
+    border: $border-width solid green;
+    z-index: 100;
+
+    &__close {
+
+        position: absolute;
+        top: -30px;
+        right: -$border-width;
+    }
 }

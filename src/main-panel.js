@@ -35,7 +35,7 @@ class MainPanel {
         // component holder manager;
         this.chm = new DnrManager( { container: this.element } );
 
-        window.addEventListener( 'resize', this.handleResize.bind(this) );
+        // window.addEventListener( 'resize', this.handleResize.bind(this) );
     }
 
     update( args = {} ) {
@@ -64,6 +64,9 @@ class MainPanel {
         return this.element.getBoundingClientRect();
     }
 
+    /**
+     * Position the canvas element in the center of main panel
+     */
     positionCanvas() {
 
         const canvasElem = this.canvas.dom();

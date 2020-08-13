@@ -1,4 +1,5 @@
 import { isInRect } from './utils';
+import { Dnr } from './dnr';
 
 class DnrManager {
 
@@ -6,7 +7,7 @@ class DnrManager {
     dnrs = [];
     activeDnr = null;
     // lastHoveredDnr is different from activeDnr. 
-    // lastHoveredDnr is update cursor styles when cursor is over the Dnr's borders
+    // lastHoveredDnr is to update cursor styles when cursor is over the Dnr's borders
     // Whem mouse moved out of the dnr, it is still calculating the positon of the mouse
     lastHoveredDnr = null;
     // Cursor coords of last movement
@@ -24,12 +25,20 @@ class DnrManager {
         document.addEventListener( 'mousedown', this.handleMouseDown.bind(this) );
         document.addEventListener( 'mouseup', this.handleMouseUp.bind(this) );
         document.addEventListener( 'mousemove', this.handleMouseMove.bind(this) );
+        document.addEventListener( 'click', this.handleClick.bind(this) );
     }
 
     add( dnr ) {
 
         this.dnrs.push( dnr );
         this.containerElem.appendChild( dnr.dom() );
+    }
+
+    remove( dnr ) {
+
+        const index = this.dnrs.indexOf( dnr );
+        this.dnrs.splice( index, 1 );
+        dnr.remove();
     }
 
     findDnrByElement( elem ) {
@@ -51,14 +60,13 @@ class DnrManager {
 
     handleMouseDown( event ) {
 
-        // console.log( '@@ mouse down', event.target  );
-
-        // Prevent default that conflicts the dragging behaviour
-        event.preventDefault();
-
         const dnr = this.findDnrByElement( event.target );
 
         if ( dnr && dnr.getState() === 'static' ) {
+
+            // If there are nodes or element, e.g. text in the Dnr
+            // then prevent the browser trirgger's default behaviour, e.g select text
+            event.preventDefault();
 
             this.activeDnr = dnr;
 
@@ -198,6 +206,26 @@ class DnrManager {
             this.activeDnr.setState( 'static' );
             this.activeDnr = null;
         }
+    }
+
+    handleDnrCloseClick( event ) {
+
+        for ( let i = 0; i < this.dnrs.length; i ++ ) {
+
+            const dnr = this.dnrs[i];
+
+            if ( Dnr.isCloseButton(event.target) && dnr.dom() === event.target.parentElement ) {
+
+                this.dnrs.splice( i, 1 );
+                dnr.remove();
+                break;
+            }
+        }
+    }
+
+    handleClick( event ) {
+
+        this.handleDnrCloseClick( event );
     }
 
     clear() {
