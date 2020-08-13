@@ -9,8 +9,8 @@ import { testDnrManager, testDnrManagerTearDown } from './dnr-manager.test';
 import { testApp } from './app.test';
 import { testUtils } from './utils.test';
 import { MainPanel } from './main-panel';
-import { Canvas } from './canvas';
 import { CompPanel } from './comp-panel';
+import { Canvas } from './canvas';
 import { App } from './app';
 import { $q } from './utils';
 
@@ -20,7 +20,7 @@ const compPanel = new CompPanel();
 
 const canvas = new Canvas( { id: 'canvas', width: 500, height: 500 } );
 const mainPanel = new MainPanel( { canvas: canvas });
-const app = new App( { mainPanel });
+const app = new App( { mainPanel, compPanel });
 
 document.addEventListener( 'mousemove', event => {
 
@@ -39,8 +39,6 @@ document.addEventListener( 'mousemove', event => {
     const y = event.clientY;
 
     infoElem.innerText = `Client X: ${x}, Client Y: ${y}`;
-
-
 } );
 
 $q( '#update-main-form' ).addEventListener( 'submit', event => {
@@ -71,11 +69,9 @@ globalThis.canvas = canvas;
 globalThis.mainPanel = mainPanel;
 globalThis.app = app;
 
-
 /* Main *******************************************************************************************/
 
 init();
-
 
 /* Functions **************************************************************************************/
 

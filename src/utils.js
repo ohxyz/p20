@@ -70,11 +70,6 @@ function rgba( color ) {
     }
 }
 
-window.$q = $q;
-window.$qa = $qa;
-window.$ce = $ce;
-window.$c = $c;
-
 export {
 
     rgba,

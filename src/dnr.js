@@ -1,4 +1,4 @@
-import { $cf, genRandomString } from './utils';
+import { $c, genRandomString } from './utils';
 
 /**
  * Draggable and Resizable

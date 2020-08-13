@@ -5,10 +5,14 @@ class App {
 
     element;
     chm;
+    mainPanel;
+    compPanel;
 
-    constructor( { mainPanel } ) {
+    constructor( { mainPanel, compPanel } ) {
 
         this.element = $q( '#app' );
+        this.mainPanel = mainPanel;
+        this.compPanel = compPanel;
 
         window.addEventListener( 'resize', this.handleResize.bind(this) );
     }

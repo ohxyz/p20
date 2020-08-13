@@ -131,6 +131,9 @@ class DnrManager {
 
         if ( this.activeDnr ) {
 
+            // Prevent the browser trirgger's default behaviour, e.g select text
+            event.preventDefault();
+
             if ( this.activeDnr.getState() === 'drag' ) {
                 this.handleDnrMove( event );
             }
@@ -208,13 +211,13 @@ class DnrManager {
         }
     }
 
-    handleDnrCloseClick( event ) {
+    handleDnrCloseButtonClick( buttonElem ) {
 
         for ( let i = 0; i < this.dnrs.length; i ++ ) {
 
             const dnr = this.dnrs[i];
 
-            if ( Dnr.isCloseButton(event.target) && dnr.dom() === event.target.parentElement ) {
+            if ( dnr.dom() === buttonElem.parentElement ) {
 
                 this.dnrs.splice( i, 1 );
                 dnr.remove();
@@ -225,7 +228,9 @@ class DnrManager {
 
     handleClick( event ) {
 
-        this.handleDnrCloseClick( event );
+        if ( Dnr.isCloseButton( event.target ) ) {
+            this.handleDnrCloseButtonClick( event.target );
+        }
     }
 
     clear() {

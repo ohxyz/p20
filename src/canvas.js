@@ -1,4 +1,5 @@
 import { Line } from './shapes/line';
+import { $ce } from './utils';
 
 class Canvas {
 
