@@ -133,7 +133,7 @@ class DnrManager {
 
             // Prevent the browser trirgger's default behaviour, e.g select text
             event.preventDefault();
-
+            
             if ( this.activeDnr.getState() === 'drag' ) {
                 this.handleDnrMove( event );
             }
@@ -166,19 +166,25 @@ class DnrManager {
 
             dnrElem.style.top = top + distY + 'px';
             dnrElem.style.height = height - distY + 'px';
+            // Keep cursor style consistent at resizing
+            // Otherwise, cursor styles changes when resize
+            document.body.style.cursor = 'n-resize';
         }
         else if ( direction === 'right' ) {
 
             dnrElem.style.width = width + distX + 'px';
+            document.body.style.cursor = 'e-resize';
         }
         else if ( direction === 'bottom' ) {
 
             dnrElem.style.height = height + distY + 'px';
+            document.body.style.cursor = 's-resize';
         }
         else if ( direction === 'left' ) {
 
             dnrElem.style.left = left + distX + 'px';
             dnrElem.style.width = width - distX + 'px';
+            document.body.style.cursor = 'w-resize';
         }
 
         this.lastX = event.clientX;

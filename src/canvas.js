@@ -9,6 +9,17 @@ class Canvas {
     element;
     context;
 
+    shouldShowHStripes = false;
+    shouldShowVStripes = false;
+    shouldShowGrid = false;
+
+    numOfVStripes = 10;
+    numOfHStripes = 10;
+    stripeColor = '#f5f5f5';
+
+    gridSpacing = 20;
+    gridLineColor = '#000000';
+
     constructor( { id, width, height } ) {
 
         if ( id === undefined ) {
@@ -25,7 +36,7 @@ class Canvas {
         this.element.height = height;
         this.element.style.width = width + 'px';
         this.element.style.height = height + 'px';
-        this.element.style.border = "1px solid black";
+        this.element.style.border = "5px solid #0000ff50";
         this.element.style.zIndex = 1;
     }
 
@@ -94,6 +105,56 @@ class Canvas {
             const yOfRect = i * eachHeight;
             this.context.fillRect( 0, yOfRect, this.width, eachHeight );
         }
+    }
+
+    /**
+     * Note: Stripes should be drawn first, then grids;
+     */
+    draw() {
+
+        this.clear();
+
+        if ( this.shouldShowVStripes && this.shouldShowHStripes ) {
+
+            this.drawGridStripes( { col: this.numOfVStripes, rows: this.numOfHStripes, color: this.stripeColor } );
+        }
+        else if ( this.shouldShowVStripes && !this.shouldShowHStripes ) {
+
+            this.drawColStripes( this.numOfVStripes, this.stripeColor );
+        }
+        else if ( !this.shouldShowVStripes && this.shouldShowHStripes ) {
+
+            this.drawRowStripes( this.numOfHStripes, this.stripeColor );
+        }
+
+        if ( this.shouldShowGrid ) {
+
+            this.drawGridLines( this.gridSpacing, this.gridLineColor );
+        }
+    }
+
+    showGrid( flag, spacing, lineColor ) {
+
+        this.shouldShowGrid = flag;
+        this.gridSpacing = spacing;
+        this.gridLineColor = lineColor;
+        this.draw();
+    }
+
+    showVStripes( flag, num, color ) {
+
+        this.shouldShowVStripes = flag;
+        this.stripeColor = color;
+        this.numOfVStripes = num;
+        this.draw();
+    }
+
+    showHStripes( flag, num, color ) {
+
+        this.shouldShowHStripes = flag;
+        this.stripeColor = color;
+        this.numOfHStripes = num;
+        this.draw();
     }
 
     clear() {

@@ -1,0 +1,14 @@
+.dnr {
+
+    // $border-width: 5px;
+
+    // border: $border-width solid #00000020;
+    z-index: 100;
+
+    &__close {
+
+        position: absolute;
+        top: -30px;
+        right: 0;
+    }
+}

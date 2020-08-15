@@ -19,7 +19,6 @@ class CompPanelItem {
         this.element.addEventListener( 'dragstart', this.handleDragStart.bind(this) );
         this.element.addEventListener( 'drag', this.handleDrag.bind(this) );
         this.element.addEventListener( 'dragend', this.handleDragEnd.bind(this) );
-
     }
 
     handleDragStart( event ) {
@@ -35,7 +34,7 @@ class CompPanelItem {
 
     handleDrag( event ) {
 
-        console.log( 'comp drag' );
+        // console.log( 'comp drag' );
     }
 
     handleDragEnd( event ) {

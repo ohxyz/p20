@@ -1,4 +1,4 @@
-import { rgba } from './utils';
+import { rgba, $c } from './utils';
 
 function testUtils() {
 

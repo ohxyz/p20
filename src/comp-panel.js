@@ -7,7 +7,7 @@ class CompPanel {
 
         this.element = $q( '#comp-panel' );
 
-        const comp1 = new CompPanelItem( { name:'Radio Button List'} );
+        const comp1 = new CompPanelItem( { name: 'Radio Button List'} );
         const comp2 = new CompPanelItem( { name: 'Textbox' } );
 
         this.element.appendChild( comp1.dom() );

@@ -1,26 +1,63 @@
-function $q( selectors ) {
+function $q( selectors, container ) {
+
+    if ( container ) {
+        return container.querySelector( selectors );
+    }
+
     return document.querySelector( selectors );
 }
 
-function $qa( selectors ) {
+function $qa( selectors, container ) {
+
+    if ( container ) {
+        return container.querySelectorAll( selectors );
+    }
+
     return document.querySelectorAll( selectors );
 }
 
 function $c( tagString ) {
+
     return document.createRange().createContextualFragment( tagString.trim() ).firstChild;
 }
 
 function $ce( tagName, options ) {
+    
     return document.createElement( tagName, options );
 }
 
 function genRandomString() {
+    
     return Math.random().toString( 36 ).slice( 2 );
 }
 
 function isInRect( x, y, rect ) {
 
     return ( x >= rect.x && x <= rect.x + rect.width ) && ( y >= rect.y && y <= rect.y + rect.height );
+}
+
+/**
+ * Calculate x and y relative to another element, after taking off width
+ * 
+ * @returns {object} - x, y relative to another element
+ */
+function calcRelPos( elem, relElem ) {
+
+    const rect = elem.getBoundingClientRect();
+    const relRect = relElem.getBoundingClientRect();
+
+    const elemStyle = window.getComputedStyle( elem );
+    const relElemStyle = window.getComputedStyle( relElem );
+    // Left border width of element
+    const lbwOfElem = parseFloat( elemStyle.borderLeftWidth );
+    const tbwOfElem = parseFloat( elemStyle.borderTopWidth );
+    const lbwOfRelElem = parseFloat( relElemStyle.borderLeftWidth );
+    const tbwOfRelElem = parseFloat( relElemStyle.borderLeftWidth );
+
+    const x = rect.left + lbwOfElem - relRect.left - lbwOfRelElem;
+    const y = rect.top + tbwOfElem - relRect.top - tbwOfRelElem;
+
+    return { x, y };
 }
 
 /**
@@ -70,13 +107,29 @@ function rgba( color ) {
     }
 }
 
-export {
+const $u = {
 
-    rgba,
     $q,
     $qa,
     $ce,
     $c,
+    rgba,
     genRandomString,
-    isInRect
+    isInRect,
+    calcRelPos,
+};
+
+window.$u = $u;
+
+export { 
+    
+    $u as default,
+    $q,
+    $qa,
+    $ce,
+    $c,
+    rgba,
+    genRandomString,
+    isInRect,
+    calcRelPos
 };

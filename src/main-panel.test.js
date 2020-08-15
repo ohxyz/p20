@@ -1,4 +1,5 @@
 import { Dnr } from './dnr';
+import { calcRelPos } from './utils';
 
 function testMainPanel() {
 
@@ -17,7 +18,8 @@ function testMainPanel() {
 
         x: 50,
         y: 400,
-        id: 'b', 
+        id: 'b',
+        borderWidth: 10,
         backgroundColor: '#00ffff30',
         text: 'main 2'
     } );
@@ -25,6 +27,9 @@ function testMainPanel() {
     globalThis.mainPanel.addComponentHolder( ch, ch2 );
 
     // g.mainPanel.add( ch2 );
+
+    const p = calcRelPos( ch2.dom(), ch.dom() );
+    console.log( p );
 }
 
 export {

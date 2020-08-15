@@ -8,10 +8,6 @@ class Dnr {
     id;
     element;
     state = 'static';
-    // topBorderRect;
-    // rightBorderRect;
-    // rectOfBottomBorder;
-    // rectOfLeftBorder;
 
     constructor( args={} ) {
 
@@ -23,13 +19,14 @@ class Dnr {
             width = 100,
             height = 100,
             backgroundColor = '#00000030',
+            borderColor = '#00000020',
+            borderStyle = 'solid',
+            borderWidth = 5,
             text = '',
             
         } = args;
 
         this.id = id;
-        // console.log( '@@ container', this.container )
-
         this.element = $c(`
             <div class="dnr">
                 <button class="dnr__close">x</button>
@@ -37,13 +34,53 @@ class Dnr {
             </div>
         `);
 
+        this.element.style.position = 'absolute';
+        this.element.style.top = y - borderWidth + 'px';
+        this.element.style.left = x - borderWidth + 'px';
         this.element.style.width = width + 'px';
         this.element.style.height = height + 'px';
-        this.element.style.position = 'absolute';
-        this.element.style.top = y + 'px';
-        this.element.style.left = x + 'px';
+        this.element.style.borderTop = `${borderWidth}px ${borderStyle} ${borderColor}`;
+        this.element.style.borderRight = `${borderWidth}px ${borderStyle} ${borderColor}`;
+        this.element.style.borderBottom = `${borderWidth}px ${borderStyle} ${borderColor}`;
+        this.element.style.borderLeft = `${borderWidth}px ${borderStyle} ${borderColor}`;
         this.element.style.backgroundColor = backgroundColor;
         this.element.setAttribute( 'dnr-state', 'static' );
+    }
+
+    /**
+     * @returns {number} - Inner box's x relative to it's container
+     */
+    get x() {
+
+        return parseFloat( this.element.style.left ) + this.getBorderLeftWidth();
+    }
+
+    set x( value ) {
+        
+        this.element.style.left = value - this.getBorderLeftWidth() + 'px';
+    }
+
+    /**
+     * @returns {number} - Inner box's y relative to it's container
+     */
+    get y() {
+        
+        return parseFloat( this.element.style.top ) + this.getBorderTopWidth();
+    }
+
+    set y( value ) {
+        
+        this.element.style.top = value - this.getBorderTopWidth() + 'px';
+    }
+
+    getBorderTopWidth() {
+
+        return parseFloat( this.element.style.borderTopWidth );
+    }
+
+    getBorderLeftWidth() {
+
+        return parseFloat( this.element.style.borderLeftWidth );
     }
 
     getState() {
@@ -64,38 +101,38 @@ class Dnr {
         const style = window.getComputedStyle( this.element );
 
         // Top border Width, etc
-        const tw = parseFloat( style.borderTopWidth );
-        const rw = parseFloat( style.borderRightWidth );
-        const bw = parseFloat( style.borderBottomWidth );
-        const lw = parseFloat( style.borderLeftWidth );
+        const tbw = parseFloat( style.borderTopWidth );
+        const rbw = parseFloat( style.borderRightWidth );
+        const bbw = parseFloat( style.borderBottomWidth );
+        const lbw = parseFloat( style.borderLeftWidth );
 
         // IMPORTANT: Those rects do not include corners
         const topRect = {
-            x: dr.x + lw, 
+            x: dr.x + lbw, 
             y: dr.y, 
-            width: dr.width - lw - rw,
-            height: tw
+            width: dr.width - lbw - rbw,
+            height: tbw
         };
 
         const rightRect = {
-            x: dr.x + dr.width - rw,
-            y: dr.y + tw,
-            width: rw,
-            height: dr.height - tw - bw
+            x: dr.x + dr.width - rbw,
+            y: dr.y + tbw,
+            width: rbw,
+            height: dr.height - tbw - bbw
         };
 
         const bottomRect = {
-            x: dr.x + lw,
-            y: dr.y + dr.height - bw,
-            width: dr.width - lw - rw,
-            height: bw
+            x: dr.x + lbw,
+            y: dr.y + dr.height - bbw,
+            width: dr.width - lbw - rbw,
+            height: bbw
         };
 
         const leftRect = {
             x: dr.x,
-            y: dr.y + tw,
-            width: lw,
-            height: dr.height - tw - bw
+            y: dr.y + tbw,
+            width: lbw,
+            height: dr.height - tbw - bbw
         };
 
         return {

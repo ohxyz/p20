@@ -36,7 +36,6 @@ class MainPanel {
         // component holder manager;
         this.chm = new DnrManager( { container: this.element } );
 
-        // window.addEventListener( 'resize', this.handleResize.bind(this) );
         this.element.addEventListener( 'dragenter', this.handleDragEnter.bind(this) );
         this.element.addEventListener( 'dragover', this.handleDragOver.bind(this) );
         this.element.addEventListener( 'dragleave', this.handleDragLeave.bind(this) );
@@ -92,7 +91,7 @@ class MainPanel {
     }
 
     /**
-     * Position against component holders against canvas
+     * Position component holders against canvas
      */ 
     positionComponentHolders() {
 
@@ -124,64 +123,56 @@ class MainPanel {
         this.positionComponentHolders();
     }
 
-    handleResize( event ) {
-
-        // this.reposition();
-    }
-
     handleDragEnter( event ) {
 
-        // event.preventDefault();
-        console.log( 'main-panel drag enter' );
         this.element.style.backgroundColor = '#ff000030';
     }
 
     handleDragOver( event ) {
 
         event.preventDefault();
-
-        // console.log( 'main-panel drag over' );
         event.dataTransfer.dropEffect = 'copy';
     }
 
     handleDragLeave( event ) {
 
-        console.log( 'main-panel drag leave' );
         this.element.style.backgroundColor = '#ff000010';
     }
 
     handleDrop( event ) {
 
-        console.log( 'main-panel drop' );
         const dataString = event.dataTransfer.getData( 'text' );
-
         let data;
 
         try {
             
             data = JSON.parse( dataString );
         }
-        catch (error) {
+        catch ( error ) {
 
             // throw new Error( 'Not a valid customized dataTransfer object!' );
             return;
         }
 
-        console.log( data );
-
         if ( data.type === 'comp-panel-item' ) {
 
-            const ch = new Dnr( {
+            // Note: Don't use offsetX, offsetY 
+            // Because curor can move on main panel's child element, e.g canvas
+            // In this case, offsetX and offsetY are related to canvas, NOT main panel.
+            const mainPanelRect = this.getSelfRect();
+            const x = event.clientX - mainPanelRect.x;
+            const y = event.clientY - mainPanelRect.y;
 
-                x: event.offsetX - 20,
-                y: event.offsetY - 20,
+            const ch = new Dnr( {
+                x: x,
+                y: y,
                 text: data.name
             } );
 
             this.addComponentHolder( ch );
+
+            this.element.style.backgroundColor = '#ff000010';
         }
-
-
     }
 
     dom() {
