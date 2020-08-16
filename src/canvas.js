@@ -17,7 +17,7 @@ class Canvas {
     numOfHStripes = 10;
     stripeColor = '#f5f5f5';
 
-    gridSpacing = 20;
+    gridCellSize = 20;
     gridLineColor = '#000000';
 
     constructor( { id, width, height } ) {
@@ -40,22 +40,22 @@ class Canvas {
         this.element.style.zIndex = 1;
     }
 
-    drawGridLines( aSpacing=20, color='#000000' ) {
+    drawGridLines( cellSize=20, color='#000000' ) {
 
-        let x = aSpacing;
+        let x = cellSize;
 
         while ( x < this.width ) {
 
             Line.drawVLine( this.context, x, 0, this.height, [2, 2], color );
-            x += aSpacing;
+            x += cellSize;
         }
 
-        let y = aSpacing;
+        let y = cellSize;
 
         while ( y < this.height ) {
 
             Line.drawHLine( this.context, 0, y, this.width, [2, 2], color );
-            y += aSpacing;
+            y += cellSize;
         }
     }
 
@@ -129,14 +129,14 @@ class Canvas {
 
         if ( this.shouldShowGrid ) {
 
-            this.drawGridLines( this.gridSpacing, this.gridLineColor );
+            this.drawGridLines( this.gridCellSize, this.gridLineColor );
         }
     }
 
-    showGrid( flag, spacing, lineColor ) {
+    showGrid( flag, cellSize, lineColor ) {
 
         this.shouldShowGrid = flag;
-        this.gridSpacing = spacing;
+        this.gridCellSize = cellSize;
         this.gridLineColor = lineColor;
         this.draw();
     }
