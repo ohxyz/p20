@@ -1,11 +1,9 @@
-import { Line } from './shapes/line';
-import { $ce } from './utils';
+import { $ce, rgba } from './utils';
 
 class Canvas {
 
     width;
     height;
-    elementId;
     element;
     context;
 
@@ -20,15 +18,10 @@ class Canvas {
     gridCellSize = 30;
     gridLineColor = '#000000';
 
-    constructor( { id, width, height } ) {
-
-        if ( id === undefined ) {
-            throw new Error( 'DOM element ID not found!' );
-        }
+    constructor( { width, height } ) {
 
         this.width = width;
         this.height = height;
-        this.elementId = id;
         this.element = $ce( 'canvas' );
         this.context = this.element.getContext( '2d' );
 
@@ -40,13 +33,73 @@ class Canvas {
         this.element.style.zIndex = 1;
     }
 
+    /**
+     * Draw a rectangle using ImageData, with minium anti-aliasing effect
+     * https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createImageData
+     */
+    drawRect( x, y, width, height, alter=[1, 0], color="#000000" ) {
+
+        const numOfSolidPoints = alter[0] < 1 ? 1 : alter[0];
+        const numOfEmptyPoints = alter[1] < 0 ? 0 : alter[1];
+
+        const [ r, g, b, a ] = rgba( color );
+        const alpha = a * 255;
+
+        const imageData = this.context.createImageData( width, height );
+
+        let indexOfImageData = 0;
+        let indexOfSolidPoints = 0;
+        let indexOfEmptyPoints = 0;
+
+        while ( indexOfImageData < imageData.data.length ) {
+
+            if ( indexOfSolidPoints < numOfSolidPoints ) {
+
+                imageData.data[ indexOfImageData + 0 ] = r; // R value
+                imageData.data[ indexOfImageData + 1 ] = g; // G value
+                imageData.data[ indexOfImageData + 2 ] = b; // B value
+                imageData.data[ indexOfImageData + 3 ] = alpha; // A value
+
+                indexOfSolidPoints ++;
+            }
+            else if ( indexOfEmptyPoints < numOfEmptyPoints ) {
+
+                indexOfEmptyPoints ++;
+            }
+
+            if ( indexOfSolidPoints === numOfSolidPoints && indexOfEmptyPoints === numOfEmptyPoints ) {
+
+                indexOfSolidPoints = 0;
+                indexOfEmptyPoints = 0;
+            }
+
+            indexOfImageData += 4;
+        }
+
+        // Draw image data to the canvas
+        this.context.putImageData( imageData, x, y );
+    }
+
+    /**
+     * Draw a vertical line with minium anti-aliasing effect by ImageData
+     */
+    drawVLine( x, y, length, dash, color ) {
+
+        this.drawRect( x, y, 1, length, dash, color );
+    }
+
+    drawHLine( x, y, length, dash, color ) {
+
+        this.drawRect( x, y, length, 1, dash, color );
+    }
+
     drawGridLines( cellSize=20, color='#000000' ) {
 
         let x = cellSize;
 
         while ( x < this.width ) {
 
-            Line.drawVLine( this.context, x, 0, this.height, [2, 2], color );
+            this.drawVLine( x, 0, this.height, [2, 2], color );
             x += cellSize;
         }
 
@@ -54,7 +107,7 @@ class Canvas {
 
         while ( y < this.height ) {
 
-            Line.drawHLine( this.context, 0, y, this.width, [2, 2], color );
+            this.drawHLine( 0, y, this.width, [2, 2], color )
             y += cellSize;
         }
     }
@@ -108,7 +161,7 @@ class Canvas {
     }
 
     /**
-     * Note: Stripes should be drawn first, then grids;
+     * Note: Stripes should be drawn first, then grid;
      */
     draw() {
 
@@ -116,7 +169,11 @@ class Canvas {
 
         if ( this.shouldShowVStripes && this.shouldShowHStripes ) {
 
-            this.drawGridStripes( { col: this.numOfVStripes, rows: this.numOfHStripes, color: this.stripeColor } );
+            this.drawGridStripes( { 
+                col: this.numOfVStripes, 
+                rows: this.numOfHStripes, 
+                color: this.stripeColor 
+            } );
         }
         else if ( this.shouldShowVStripes && !this.shouldShowHStripes ) {
 
@@ -159,7 +216,7 @@ class Canvas {
     /**
      * @param {number} x - Position X relative to canvas
      * @param {number} y - Position Y relative to canvas
-     * @return {object} index of col and index of row
+     * @return {object} index of col and index of row of the cell that contains x and y
      */
     getIndexOfCell( x, y ) {
 

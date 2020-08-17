@@ -47,51 +47,6 @@ function isInRect( x, y, rect ) {
 }
 
 /**
- * Calculate x and y relative to another element, after taking off border width
- * 
- * @returns {object} - x, y relative to another element
- */
-function calcRelPos( elem, relElem ) {
-
-    const rect = elem.getBoundingClientRect();
-    const relRect = relElem.getBoundingClientRect();
-
-    const elemStyle = window.getComputedStyle( elem );
-    const relElemStyle = window.getComputedStyle( relElem );
-    // Left border width of element
-    const leftBorderOfElem = parseFloat( elemStyle.borderLeftWidth );
-    const topBorderOfElem = parseFloat( elemStyle.borderTopWidth );
-    const leftBorderOfRel = parseFloat( relElemStyle.borderLeftWidth );
-    const topBorderOfRel = parseFloat( relElemStyle.borderLeftWidth );
-
-    const x = rect.left + leftBorderOfElem - relRect.left - leftBorderOfRel;
-    const y = rect.top + topBorderOfElem - relRect.top - topBorderOfRel;
-
-    return { x, y };
-}
-
-/**
- * Set an element's position relative to another element
- * Assume they are in the same container. Both are position:absolute
- */
-function setRelPos( elem, relElem, x, y ) {
-
-    const elemStyle = window.getComputedStyle( elem );
-    const relElemStyle = window.getComputedStyle( relElem );
-
-    const leftBorderOfElem = parseFloat( elemStyle.borderLeftWidth );
-    const topBorderOfElem = parseFloat( elemStyle.borderTopWidth );
-    const leftBorderOfRel = parseFloat( relElemStyle.borderLeftWidth );
-    const topBorderOfRel = parseFloat( relElemStyle.borderLeftWidth );
-
-    const leftOfRel = parseFloat( relElemStyle.left );
-    const topOfRel = parseFloat( relElemStyle.top );
-
-    elem.style.left = leftOfRel + leftBorderOfRel - leftBorderOfElem  + x + 'px';
-    elem.style.top = topOfRel + topBorderOfRel - topBorderOfElem + y + 'px'; 
-}
-
-/**
  * Convert any color string to array of RGBA values
  * https://gist.github.com/oriadam/396a4beaaad465ca921618f2f2444d49
  */
@@ -160,6 +115,4 @@ export {
     rgba,
     genRandomString,
     isInRect,
-    calcRelPos,
-    setRelPos
 };

@@ -1,7 +1,7 @@
-import './scss/index.scss';
-import { App } from './app';
-import { $q } from './utils';
-import { Dnr } from './dnr';
+import '../../src/scss/index.scss';
+import { App } from '../../src/app';
+import { $q } from '../../src/utils';
+import { Dnr } from '../../src/dnr';
 
 /* Globals ****************************************************************************************/
 

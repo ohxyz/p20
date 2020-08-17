@@ -3,17 +3,17 @@ const path = require( 'path' );
 module.exports = {
     
     mode: 'development',
-    entry: './src/index.js',
+    entry: './test/app/index.js',
     output: {
-        path: path.join( __dirname, 'public' ),
+        path: path.join( __dirname, 'test' ),
         filename: 'bundle.js'
     },
     devtool: 'inline-source-map',
     devServer: {
-        contentBase: path.join( __dirname, 'public' ),
+        contentBase: path.join( __dirname, 'test' ),
         compress: true,
-        port: 5000,
-        open: true,
+        port: 5010,
+        open: true
     },
     module: {
         rules: [ 

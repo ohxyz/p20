@@ -1,7 +1,8 @@
-import { $q, $c, calcRelPos, setRelPos } from './utils';
+import { $q, $c } from './utils';
 import { DnrManager } from './dnr-manager';
 import { Dnr } from './dnr';
 import { Canvas } from './canvas';
+import { Box } from './box';
 
 class MainPanel {
 
@@ -197,13 +198,13 @@ class MainPanel {
 
         if ( dnr ) {
 
-            const relPos = calcRelPos( dnr.dom(), this.canvas.dom() );
-            const index = this.canvas.getIndexOfCell( relPos.x, relPos.y );
+            const relPos = Box.calcRelPos( dnr.dom(), this.canvas.dom() );
+            const index = this.canvas.getIndexOfCell( relPos.left, relPos.top );
 
             const distX = index.col * this.canvas.gridCellSize;
             const distY = index.row * this.canvas.gridCellSize;
 
-            setRelPos( dnr.dom(), this.canvas.dom(), distX, distY );
+            Box.setRelPos( dnr.dom(), this.canvas.dom(), { left: distX, top: distY } );
         }
     }
 

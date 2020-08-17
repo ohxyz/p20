@@ -1,4 +1,5 @@
-import { $c, $q, calcRelPos } from '../utils';
+import { $c, $q } from '../utils';
+import { Box } from '../box';
 
 class ShowDnrCoordsTool {
 
@@ -31,8 +32,8 @@ class ShowDnrCoordsTool {
 
                 contentOfMainPanel = `DNR r/t Main Panel X: ${ dnr.x }, Y: ${ dnr.y }`;
                 
-                const relPos = calcRelPos( dnr.dom(), this.mainPanel.canvas.dom() );
-                contentOfCanvas = `DNR r/t Canvas X: ${ relPos.x }, Y: ${ relPos.y }`;
+                const relPos = Box.calcRelPos( dnr.dom(), this.mainPanel.canvas.dom() );
+                contentOfCanvas = `DNR r/t Canvas X: ${ relPos.left }, Y: ${ relPos.top }`;
             }
 
             $q( '#show-dnr-coords__main-panel', this.element ).innerText = contentOfMainPanel;

@@ -1,4 +1,4 @@
-import { Canvas } from './canvas';
+import { Canvas } from '../../src/canvas';
 
 const canvas = new Canvas( { id: 'canvas', width: 500, height: 500 } );
 
