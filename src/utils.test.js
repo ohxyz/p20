@@ -1,15 +1,12 @@
 import { rgba, $c } from './utils';
 
-function testUtils() {
+console.log( 'Test Utils' );
 
-    console.log( 'Test Utils' );
+const frag = $c( '<div id="a"><div id="aa">bb</div></div>' );
 
-    const frag = $c( '<div id="a"><div id="aa">aa</div></div>' );
+const range = document.createRange();
+const parent = frag.querySelector( '#a' );
 
-    const range = document.createRange();
-    const parent = frag.querySelector( '#a' );
+document.body.appendChild( frag );
 
-    document.body.appendChild( frag );
-}
 
-export { testUtils }

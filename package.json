@@ -4,7 +4,8 @@
   "description": "HTML canvas project",
   "scripts": {
     "build": "webpack --config webpack.dev.js",
-    "dev": "webpack-dev-server --config webpack.dev.js --open"
+    "//dev": "// to test a single script, run .e.g.: npm run dev src/utils.test.js",
+    "dev": "webpack-dev-server --config webpack.dev.js"
   },
   "author": "",
   "license": "UNLICENSED",

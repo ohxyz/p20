@@ -10,7 +10,7 @@ body {
 
 .canvas {
 
-    border: 1px solid black;
+
 }
 
 .app {
@@ -66,4 +66,13 @@ body {
     bottom: var(--status-bar-height);
     right: var(--prop-panel-width);
     overflow: auto;
+}
+
+.buttons {
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1001;
+    width: 300px;
 }

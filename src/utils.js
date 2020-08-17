@@ -26,6 +26,16 @@ function $ce( tagName, options ) {
     return document.createElement( tagName, options );
 }
 
+function $a( elem ) {
+
+    for ( let i = 1; i < arguments.length; i ++ ) {
+
+        elem.appendChild( arguments[i] );
+    }
+
+    return elem;
+}
+
 function genRandomString() {
     
     return Math.random().toString( 36 ).slice( 2 );
@@ -37,7 +47,7 @@ function isInRect( x, y, rect ) {
 }
 
 /**
- * Calculate x and y relative to another element, after taking off width
+ * Calculate x and y relative to another element, after taking off border width
  * 
  * @returns {object} - x, y relative to another element
  */
@@ -49,15 +59,36 @@ function calcRelPos( elem, relElem ) {
     const elemStyle = window.getComputedStyle( elem );
     const relElemStyle = window.getComputedStyle( relElem );
     // Left border width of element
-    const lbwOfElem = parseFloat( elemStyle.borderLeftWidth );
-    const tbwOfElem = parseFloat( elemStyle.borderTopWidth );
-    const lbwOfRelElem = parseFloat( relElemStyle.borderLeftWidth );
-    const tbwOfRelElem = parseFloat( relElemStyle.borderLeftWidth );
+    const leftBorderOfElem = parseFloat( elemStyle.borderLeftWidth );
+    const topBorderOfElem = parseFloat( elemStyle.borderTopWidth );
+    const leftBorderOfRel = parseFloat( relElemStyle.borderLeftWidth );
+    const topBorderOfRel = parseFloat( relElemStyle.borderLeftWidth );
 
-    const x = rect.left + lbwOfElem - relRect.left - lbwOfRelElem;
-    const y = rect.top + tbwOfElem - relRect.top - tbwOfRelElem;
+    const x = rect.left + leftBorderOfElem - relRect.left - leftBorderOfRel;
+    const y = rect.top + topBorderOfElem - relRect.top - topBorderOfRel;
 
     return { x, y };
+}
+
+/**
+ * Set an element's position relative to another element
+ * Assume they are in the same container. Both are position:absolute
+ */
+function setRelPos( elem, relElem, x, y ) {
+
+    const elemStyle = window.getComputedStyle( elem );
+    const relElemStyle = window.getComputedStyle( relElem );
+
+    const leftBorderOfElem = parseFloat( elemStyle.borderLeftWidth );
+    const topBorderOfElem = parseFloat( elemStyle.borderTopWidth );
+    const leftBorderOfRel = parseFloat( relElemStyle.borderLeftWidth );
+    const topBorderOfRel = parseFloat( relElemStyle.borderLeftWidth );
+
+    const leftOfRel = parseFloat( relElemStyle.left );
+    const topOfRel = parseFloat( relElemStyle.top );
+
+    elem.style.left = leftOfRel + leftBorderOfRel - leftBorderOfElem  + x + 'px';
+    elem.style.top = topOfRel + topBorderOfRel - topBorderOfElem + y + 'px'; 
 }
 
 /**
@@ -113,10 +144,7 @@ const $u = {
     $qa,
     $ce,
     $c,
-    rgba,
-    genRandomString,
-    isInRect,
-    calcRelPos,
+    $a,
 };
 
 window.$u = $u;
@@ -128,8 +156,10 @@ export {
     $qa,
     $ce,
     $c,
+    $a,
     rgba,
     genRandomString,
     isInRect,
-    calcRelPos
+    calcRelPos,
+    setRelPos
 };

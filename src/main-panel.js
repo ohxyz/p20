@@ -1,6 +1,7 @@
-import { $q } from './utils';
+import { $q, $c, calcRelPos, setRelPos } from './utils';
 import { DnrManager } from './dnr-manager';
 import { Dnr } from './dnr';
+import { Canvas } from './canvas';
 
 class MainPanel {
 
@@ -16,11 +17,12 @@ class MainPanel {
 
             width = 800,
             height = 800,
-            canvas = null
+            canvasWidth = 500,
+            canvasHeight = 500,
 
         } = args;
 
-        this.element = $q( '#main-panel' );
+        this.element = $c( '<div id="main-panel" class="main-panel">' );
         this.element.style.width = width + 'px';
         this.element.style.height = height + 'px';
         this.element.style.position = 'relative';
@@ -28,10 +30,8 @@ class MainPanel {
         this.element.style.backgroundColor = '#ff000010';
         this.element.style.margin = '0 auto';
 
-        this.canvas = canvas;
-        this.element.appendChild( canvas.dom() );
-
-        this.positionCanvas();
+        this.canvas = new Canvas( { id: 'canvas', width: canvasWidth, height: canvasHeight } )
+        this.element.appendChild( this.canvas.dom() );
 
         // component holder manager;
         this.chm = new DnrManager( { container: this.element } );
@@ -40,6 +40,8 @@ class MainPanel {
         this.element.addEventListener( 'dragover', this.handleDragOver.bind(this) );
         this.element.addEventListener( 'dragleave', this.handleDragLeave.bind(this) );
         this.element.addEventListener( 'drop', this.handleDrop.bind(this) );
+        this.element.addEventListener( 'mouseup', this.handleMouseUp.bind(this) );
+
     }
 
     update( args = {} ) {
@@ -63,40 +65,50 @@ class MainPanel {
         }
     }
 
-    getSelfRect() {
+    getRect() {
 
         return this.element.getBoundingClientRect();
     }
 
     /**
      * Position the canvas element in the center of main panel
+     *
+     * @todo Consider refactoring. Put this method into Canvas class
      */
     positionCanvas() {
 
-        const canvasElem = this.canvas.dom();
-        const selfRect = this.getSelfRect();
+        const selfRect = this.getRect();
 
-        this.prevCanvasRect = canvasElem.getBoundingClientRect();
+        this.prevCanvasRect = this.canvas.dom().getBoundingClientRect();
 
-        const widthOfCanvas = parseFloat( canvasElem.style.width );
-        const heightOfCanvas = parseFloat( canvasElem.style.height );
-        const topOfCanvas = parseFloat( ( selfRect.height - heightOfCanvas ) / 2 );
-        const leftOfCanvas = parseFloat( ( selfRect.width - widthOfCanvas ) / 2 );
+        const canvasStyle = window.getComputedStyle( this.canvas.dom() );
+
+        const widthOfCanvas = parseFloat( canvasStyle.width );
+        const heightOfCanvas = parseFloat( canvasStyle.height );
+
+        const leftBorderOfCanvas = parseFloat( canvasStyle.borderLeftWidth );
+        const rightBorderOfCanvas = parseFloat( canvasStyle.borderRightWidth );
+        const topBorderOfCanvas = parseFloat( canvasStyle.borderTopWidth );
+        const bottomBorderOfCanvas = parseFloat( canvasStyle.borderBottomWidth );
+
+        const leftOfCanvas = parseFloat( 
+            ( selfRect.width - widthOfCanvas - leftBorderOfCanvas - rightBorderOfCanvas ) / 2 
+        );
+        const topOfCanvas = parseFloat( 
+            ( selfRect.height - heightOfCanvas - topBorderOfCanvas - bottomBorderOfCanvas ) / 2 
+        );
 
         this.canvas.dom().style.position = 'absolute';
         this.canvas.dom().style.left = leftOfCanvas + 'px';
         this.canvas.dom().style.top = topOfCanvas + 'px';
 
-        this.currCanvasRect = canvasElem.getBoundingClientRect();
+        this.currCanvasRect = this.canvas.dom().getBoundingClientRect();
     }
 
     /**
      * Position component holders against canvas
      */ 
     positionComponentHolders() {
-
-        // const canvasRect = this.canvas.dom().getBoundingClientRect();
-        // console.log( '@@ prev in ', this.prevCanvasRect );
 
         for ( const ch of this.chm.getAll() ) {
 
@@ -112,8 +124,6 @@ class MainPanel {
 
             ch.dom().style.left = newLeftOfCh + 'px';
             ch.dom().style.top = newTopOfCh + 'px';
-
-            // console.log( distX, distY, newLeftOfCh, newTopOfCh );
         }
     }
 
@@ -134,8 +144,13 @@ class MainPanel {
         event.dataTransfer.dropEffect = 'copy';
     }
 
+    /**
+     * The event fires when cursor moves into a child element
+     * https://stackoverflow.com/questions/10867506
+     */ 
     handleDragLeave( event ) {
 
+        // Note: The color changes when cursor moves into canvas element
         this.element.style.backgroundColor = '#ff000010';
     }
 
@@ -159,19 +174,36 @@ class MainPanel {
             // Note: Don't use offsetX, offsetY 
             // Because curor can move on main panel's child element, e.g canvas
             // In this case, offsetX and offsetY are related to canvas, NOT main panel.
-            const mainPanelRect = this.getSelfRect();
+            const mainPanelRect = this.getRect();
             const x = event.clientX - mainPanelRect.x;
             const y = event.clientY - mainPanelRect.y;
 
             const ch = new Dnr( {
                 x: x,
                 y: y,
-                text: data.name
+                text: data.name,
+                name: data.name
             } );
 
             this.addComponentHolder( ch );
 
             this.element.style.backgroundColor = '#ff000010';
+        }
+    }
+
+    handleMouseUp( event ) {
+
+        const dnr = this.chm.activeDnr;
+
+        if ( dnr ) {
+
+            const relPos = calcRelPos( dnr.dom(), this.canvas.dom() );
+            const index = this.canvas.getIndexOfCell( relPos.x, relPos.y );
+
+            const distX = index.col * this.canvas.gridCellSize;
+            const distY = index.row * this.canvas.gridCellSize;
+
+            setRelPos( dnr.dom(), this.canvas.dom(), distX, distY );
         }
     }
 

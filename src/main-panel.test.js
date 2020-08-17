@@ -29,7 +29,6 @@ function testMainPanel() {
     // g.mainPanel.add( ch2 );
 
     const p = calcRelPos( ch2.dom(), ch.dom() );
-    console.log( p );
 }
 
 export {

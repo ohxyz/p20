@@ -1,11 +1,11 @@
 import { CompPanelItem } from './comp-panel-item';
-import { $q } from './utils';
+import { $c } from './utils';
 
 class CompPanel {
 
     constructor() {
 
-        this.element = $q( '#comp-panel' );
+        this.element = $c( '<div id="comp-panel" class="comp-panel">' );
 
         const comp1 = new CompPanelItem( { name: 'Radio Button List'} );
         const comp2 = new CompPanelItem( { name: 'Textbox' } );

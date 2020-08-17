@@ -1,9 +1,9 @@
 import { Canvas } from './canvas';
 
-function testCanvas() {
+const canvas = new Canvas( { id: 'canvas', width: 500, height: 500 } );
 
-    globalThis.canvas.drawColStripes( 10, '#ff000022');
-    globalThis.canvas.drawGridLines( 30, '#00000080' );
-}
+document.body.appendChild( canvas.dom() );
 
-export { testCanvas };
+canvas.drawColStripes( 10, '#ff000022');
+canvas.drawGridLines( 30, '#00000080' );
+

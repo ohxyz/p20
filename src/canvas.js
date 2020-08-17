@@ -15,9 +15,9 @@ class Canvas {
 
     numOfVStripes = 10;
     numOfHStripes = 10;
-    stripeColor = '#f5f5f5';
+    stripeColor = '#ff000020';
 
-    gridCellSize = 20;
+    gridCellSize = 30;
     gridLineColor = '#000000';
 
     constructor( { id, width, height } ) {
@@ -36,7 +36,7 @@ class Canvas {
         this.element.height = height;
         this.element.style.width = width + 'px';
         this.element.style.height = height + 'px';
-        this.element.style.border = "5px solid #0000ff50";
+        this.element.style.border = "10px solid #0000ff50";
         this.element.style.zIndex = 1;
     }
 
@@ -61,7 +61,7 @@ class Canvas {
 
     drawGridStripes( args ) {
 
-        const { cols=1, rows=1, color='#f5f5f5' } = args;
+        const { cols=1, rows=1, color='#ff000020' } = args;
 
         const eachWidth = Math.round( this.width / cols );
         const eachHeight = Math.round( this.height / rows );
@@ -79,7 +79,7 @@ class Canvas {
         }
     }
 
-    drawColStripes( aNumOfStripes=1, aAlterColor='#f5f5f5' ) {
+    drawColStripes( aNumOfStripes=10, aAlterColor='#ff000020' ) {
 
         const eachWidth = Math.round( this.width / aNumOfStripes );
         
@@ -93,7 +93,7 @@ class Canvas {
         }
     }
 
-    drawRowStripes( aNumOfStripes=1, aAlterColor='#f5f5f5') {
+    drawRowStripes( aNumOfStripes=10, aAlterColor='#ff000020') {
 
         const eachHeight = Math.round( this.width / aNumOfStripes );
         
@@ -133,33 +133,40 @@ class Canvas {
         }
     }
 
-    showGrid( flag, cellSize, lineColor ) {
+    showGrid( flag ) {
 
         this.shouldShowGrid = flag;
-        this.gridCellSize = cellSize;
-        this.gridLineColor = lineColor;
         this.draw();
     }
 
-    showVStripes( flag, num, color ) {
+    showVStripes( flag ) {
 
         this.shouldShowVStripes = flag;
-        this.stripeColor = color;
-        this.numOfVStripes = num;
         this.draw();
     }
 
-    showHStripes( flag, num, color ) {
+    showHStripes( flag ) {
 
         this.shouldShowHStripes = flag;
-        this.stripeColor = color;
-        this.numOfHStripes = num;
         this.draw();
     }
 
     clear() {
 
         this.context.clearRect( 0, 0, this.width, this.height );
+    }
+
+    /**
+     * @param {number} x - Position X relative to canvas
+     * @param {number} y - Position Y relative to canvas
+     * @return {object} index of col and index of row
+     */
+    getIndexOfCell( x, y ) {
+
+        const colIndex = Math.floor( x / this.gridCellSize );
+        const rowIndex = Math.floor( y / this.gridCellSize );
+
+        return { col: colIndex, row: rowIndex };
     }
 
     dom() {

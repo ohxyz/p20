@@ -23,7 +23,7 @@ class CompPanelItem {
 
     handleDragStart( event ) {
 
-        console.log( 'comp drag start' );
+        // console.log( 'comp drag start' );
         event.dataTransfer.effectAllowed = "copyMove";
 
         const dataString = JSON.stringify( { type: 'comp-panel-item', name: this.name } )
@@ -39,7 +39,7 @@ class CompPanelItem {
 
     handleDragEnd( event ) {
 
-        console.log( 'drag end' );
+        // console.log( 'drag end' );
     }
 
     dom() {

@@ -7,7 +7,6 @@ import { testCanvas } from './canvas.test';
 import { testMainPanel } from './main-panel.test';
 import { testDnrManager, testDnrManagerTearDown } from './dnr-manager.test';
 import { testApp } from './app.test';
-import { testUtils } from './utils.test';
 import { MainPanel } from './main-panel';
 import { CompPanel } from './comp-panel';
 import { ToolBar } from './tool-bar';
@@ -19,12 +18,12 @@ import { $q } from './utils';
 /* Globals ****************************************************************************************/
 
 const compPanel = new CompPanel();
-
 const canvas = new Canvas( { id: 'canvas', width: 500, height: 500 } );
 const mainPanel = new MainPanel( { canvas: canvas });
-const app = new App( { mainPanel, compPanel });
 const toolBar = new ToolBar( { mainPanel } );
 const statusBar = new StatusBar( { mainPanel } );
+
+const app = new App( { mainPanel, compPanel });
 
 const modules = {
 
@@ -33,7 +32,6 @@ const modules = {
     'test-app': testApp,
     'main-panel': testMainPanel,
     'canvas': testCanvas,
-    'utils': testUtils
     // 'point': testPoint,
     // 'line': testLine,
     // 'circle': testCircle,

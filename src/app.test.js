@@ -1,12 +1,29 @@
+import './scss/index.scss';
+import { App } from './app';
+import { $q } from './utils';
 import { Dnr } from './dnr';
 
-function testApp() {
+/* Globals ****************************************************************************************/
 
-    console.log( 'Test App' );
-    // g.mainPanel.dom().style.backgroundColor = 'red';
-}
+const app = new App();
 
-export {
+const ch = new Dnr( {
 
-    testApp
-};
+    x: 0,
+    y: 0,
+    id: 'a', 
+    backgroundColor: '#00ff0050',
+    text: 'main 1'
+} );
+
+const ch2 = new Dnr( {
+
+    x: 50,
+    y: 400,
+    id: 'b',
+    borderWidth: 10,
+    backgroundColor: '#00ffff30',
+    text: 'main 2'
+} );
+
+app.mainPanel.addComponentHolder( ch, ch2 );

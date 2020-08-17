@@ -22,11 +22,13 @@ class Dnr {
             borderColor = '#00000020',
             borderStyle = 'solid',
             borderWidth = 5,
+            name = '',
             text = '',
             
         } = args;
 
         this.id = id;
+        this.name = name;
         this.element = $c(`
             <div class="dnr">
                 <button class="dnr__close">x</button>
