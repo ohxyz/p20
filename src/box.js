@@ -15,11 +15,11 @@ class Box {
         return this.element.getBoundingClientRect();
     }
 
-    self() {
+    inner() {
 
     }
 
-    inner() {
+    outer() {
 
     }
 

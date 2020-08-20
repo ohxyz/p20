@@ -16,20 +16,19 @@ module.exports = {
         open: true,
     },
     module: {
-        rules: [ 
-            {
-                test: /\.js[x]{0,1}$/,
-                exclude: /node_modules/,
-                loader: 'babel-loader'
-            },
-            {
-                test: /\.s[ac]ss$/i,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader',
-                ],
-            }
-        ]
+        rules: [ {
+
+            test: /\.js[x]{0,1}$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader'
+        
+        }, {
+            test: /\.s[ac]ss$/i,
+            use: [
+                'style-loader',
+                'css-loader',
+                'sass-loader',
+            ],
+        } ]
     }
 };

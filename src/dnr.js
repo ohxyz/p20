@@ -1,4 +1,4 @@
-import { $c, genRandomString } from './utils';
+import { $c, $q, genRandomString } from './utils';
 
 /**
  * Draggable and Resizable
@@ -23,7 +23,7 @@ class Dnr {
             borderStyle = 'solid',
             borderWidth = 5,
             name = '',
-            text = '',
+            content = ''
             
         } = args;
 
@@ -32,9 +32,19 @@ class Dnr {
         this.element = $c(`
             <div class="dnr">
                 <button class="dnr__close">x</button>
-                <div class="dnr__content">${text}</div>
+                <div class="dnr__content"></div>
             </div>
         `);
+
+        if ( typeof content === 'string' ) {
+            $q( '.dnr__content', this.element ).appendChild( $c( content ) );
+        }
+        else if ( content instanceof Node ) {
+            $q( '.dnr__content', this.element ).appendChild( content );
+        }
+        else {
+            throw new Error( 'Invalid content' );
+        }
 
         this.element.style.position = 'absolute';
         this.element.style.top = y - borderWidth + 'px';

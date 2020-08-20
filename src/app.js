@@ -23,11 +23,13 @@ class App {
         this.compPanel = new CompPanel();
         this.toolBar = new ToolBar( { mainPanel: this.mainPanel } );
         this.statusBar = new StatusBar( { mainPanel: this.mainPanel } );
+        this.propPanel = new PropPanel( { mainPanel: this.mainPanel } );
 
         $a( this.element, 
             this.toolBar.dom(), 
             this.statusBar.dom(),
             this.compPanel.dom(),
+            this.propPanel.dom(),
             $a( this.mainContainerElement, this.mainPanel.dom() )
         );
 

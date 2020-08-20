@@ -1,8 +1,9 @@
-import { $q, $c } from './utils';
+import { $q, $c, isInRect } from './utils';
 import { DnrManager } from './dnr-manager';
 import { Dnr } from './dnr';
 import { Canvas } from './canvas';
 import { Box } from './box';
+import { TextField } from 'p20c';
 
 class MainPanel {
 
@@ -59,7 +60,7 @@ class MainPanel {
     /**
      * @param { ...Dnr } - component holder
      */ 
-    addComponentHolder() {
+    addCompHolder() {
 
         for ( const ch of arguments ) {
             this.chm.add( ch );
@@ -109,7 +110,7 @@ class MainPanel {
     /**
      * Position component holders against canvas
      */ 
-    positionComponentHolders() {
+    positionCompHolders() {
 
         for ( const ch of this.chm.getAll() ) {
 
@@ -131,7 +132,7 @@ class MainPanel {
     reposition() {
 
         this.positionCanvas();
-        this.positionComponentHolders();
+        this.positionCompHolders();
     }
 
     handleDragEnter( event ) {
@@ -179,32 +180,53 @@ class MainPanel {
             const x = event.clientX - mainPanelRect.x;
             const y = event.clientY - mainPanelRect.y;
 
+            let content = null;
+
+            if ( data.name === 'Textbox' ) {
+
+                content = new TextField().dom();
+            }
+            else {
+
+                content = data.name;
+            }
+
             const ch = new Dnr( {
                 x: x,
                 y: y,
-                text: data.name,
+                content: content,
                 name: data.name
             } );
 
-            this.addComponentHolder( ch );
-
+            this.addCompHolder( ch );
             this.element.style.backgroundColor = '#ff000010';
         }
     }
 
     handleMouseUp( event ) {
 
-        const dnr = this.chm.activeDnr;
+        const ch = this.chm.activeDnr;
 
-        if ( dnr ) {
+        if ( ch ) {
 
-            const relPos = Box.calcRelPos( dnr.dom(), this.canvas.dom() );
+            this.handleCompHolderCanvasAlign( ch )
+        }
+    }
+
+    handleCompHolderCanvasAlign( compHolder ) {
+
+        const compHolderRect = compHolder.dom().getBoundingClientRect();
+        const canvasRect = this.canvas.dom().getBoundingClientRect();
+
+        if ( isInRect( compHolderRect.x, compHolderRect.y, canvasRect ) ) {
+
+            const relPos = Box.calcRelPos( compHolder.dom(), this.canvas.dom() );
             const index = this.canvas.getIndexOfCell( relPos.left, relPos.top );
 
             const distX = index.col * this.canvas.gridCellSize;
             const distY = index.row * this.canvas.gridCellSize;
 
-            Box.setRelPos( dnr.dom(), this.canvas.dom(), { left: distX, top: distY } );
+            Box.setRelPos( compHolder.dom(), this.canvas.dom(), { left: distX, top: distY } );
         }
     }
 

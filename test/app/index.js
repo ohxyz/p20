@@ -13,7 +13,7 @@ const ch = new Dnr( {
     y: 0,
     id: 'a', 
     backgroundColor: '#00ff0050',
-    text: 'main 1'
+    content: 'main 1'
 } );
 
 const ch2 = new Dnr( {
@@ -23,7 +23,7 @@ const ch2 = new Dnr( {
     id: 'b',
     borderWidth: 10,
     backgroundColor: '#00ffff30',
-    text: 'main 2'
+    content: '<i>main 2</i>'
 } );
 
-app.mainPanel.addComponentHolder( ch, ch2 );
+app.mainPanel.addCompHolder( ch, ch2 );

@@ -131,6 +131,8 @@ class DnrManager {
 
         if ( this.activeDnr ) {
 
+            const borderRects = this.activeDnr.getBorderRects();
+
             // Prevent the browser trirgger's default behaviour, e.g select text
             event.preventDefault();
             
@@ -138,29 +140,32 @@ class DnrManager {
                 this.handleDnrMove( event );
             }
             else if ( this.activeDnr.getState() === 'resize-top' ) {
-                this.handleDnrResize( 'top' );
+                this.handleDnrResize( event, 'top' );
             }
             else if ( this.activeDnr.getState() === 'resize-right' ) {
-                this.handleDnrResize( 'right' );
+                this.handleDnrResize( event, 'right' );
             }
             else if ( this.activeDnr.getState() === 'resize-bottom' ) {
-                this.handleDnrResize( 'bottom' );
+                this.handleDnrResize( event, 'bottom' );
             }
             else if ( this.activeDnr.getState() === 'resize-left' ) {
-                this.handleDnrResize( 'left' );
+                this.handleDnrResize( event, 'left' );
             }
         }
     }
 
-    handleDnrResize( direction ) {
+    handleDnrResize( event, direction ) {
 
         const dnrElem = this.activeDnr.dom();
+        const dnrStyle = window.getComputedStyle( dnrElem );
+        
+        const top = parseFloat( dnrStyle.top );
+        const left = parseFloat( dnrStyle.left );
+        const width = parseFloat( dnrStyle.width );
+        const height = parseFloat( dnrStyle.height );
+
         const distX = event.clientX - this.lastX;
         const distY = event.clientY - this.lastY;
-        const top = parseFloat( dnrElem.style.top );
-        const left = parseFloat( dnrElem.style.left );
-        const width = parseFloat( dnrElem.style.width );
-        const height = parseFloat( dnrElem.style.height );
 
         if ( direction === 'top' ) {
 
@@ -189,7 +194,6 @@ class DnrManager {
 
         this.lastX = event.clientX;
         this.lastY = event.clientY;
-
     }
 
     handleDnrMove( event ) {
