@@ -1,22 +1,116 @@
+/**
+ * An interface that provides utility functions
+ */
 class Box {
+
+    #element;
 
     constructor( domElement ) {
 
-        this.element = domElement;
+        this.#element = domElement;
     }
 
     style() {
 
-        return window.getComputedStyle( this.element );
+        return window.getComputedStyle( this.#element );
     }
 
-    inner() {
+    /**
+     * Exclude borders
+     */
+    innerRect() {
 
+        const rect = this.#element.getBoundingClientRect();
+
+        const { x, y, width, height, right, bottom } = rect;
+        
+        const borders = this.borders();
+
+        const left = x + borders.left;
+        const top = y + borders.top;
+
+        return {
+
+            x: left,
+            y: top,
+            width: width - borders.left - borders.right,
+            height: height - borders.top - borders.bottom,
+            left,
+            top,
+            right: right - borders.right,
+            bottom: bottom - borders.bottom
+        };
     }
 
-    outer() {
+    outerRect() {
 
-        return this.element.getBoundingClientRect();
+        return this.#element.getBoundingClientRect();
+    }
+
+    borders() {
+
+        return Box.getBorders( this.#element );
+    }
+
+    /**
+     * Position the box relative to it's container
+     * Note: container's position must not be `static`
+     */
+    position( x, y, excludeBorders=true ) {
+
+        this.#element.style.position = 'absolute';
+
+        if ( excludeBorders === false ) {
+
+            this.#element.style.left = x + 'px';
+            this.#element.style.top = y + 'px';
+            return;
+        }
+
+        const style = window.getComputedStyle( this.#element );
+        const leftBorder = parseFloat( style.borderLeftWidth );
+        const topBorder = parseFloat( style.borderTopWidth );
+
+        this.#element.style.left = x - leftBorder + 'px';
+        this.#element.style.top = y - topBorder + 'px';
+    }
+
+    center() {
+
+        const parent = this.#element.parentElement;
+
+        if ( !parent ) {
+            throw new Error( "Parent element not found!" );
+        }
+
+        const pRect = parent.getBoundingClientRect();
+        const pStyle = window.getComputedStyle( parent );
+        const pBorders = Box.getBorders( parent );
+
+        const pWidth = pRect.width - pBorders.left - pBorders.right;
+        const pHeight = pRect.height - pBorders.top - pBorders.bottom;
+
+        const myRect = this.innerRect();
+        const myWidth = myRect.width;
+        const myHeight = myRect.height;
+
+        this.position( (pWidth - myWidth)/2, (pHeight - myHeight)/2 );
+    }
+
+    dom() {
+
+        return this.#element;
+    }
+
+    static getBorders( element ) {
+
+        const style = window.getComputedStyle( element );
+        const left = parseFloat( style.borderLeftWidth );
+        const right = parseFloat( style.borderRightWidth );
+        const top = parseFloat( style.borderTopWidth );
+        const bottom = parseFloat( style.borderBottomWidth );
+
+        return { left, right, top, bottom };
     }
 
     /**

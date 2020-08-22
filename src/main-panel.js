@@ -4,7 +4,7 @@ import { Dnr } from './dnr';
 import { Canvas } from './canvas';
 import { Box } from './box';
 import { TextField } from 'p20c';
-import { Page } from './page';
+import { Design } from './design';
 
 class MainPanel {
 
@@ -34,10 +34,10 @@ class MainPanel {
         this.element.style.margin = '0 auto';
 
         this.canvas = new Canvas( { id: 'canvas', width: canvasWidth, height: canvasHeight } )
-        this.element.appendChild( this.canvas.dom() );
+        // this.element.appendChild( this.canvas.dom() );
 
-        // this.page = new Page();
-        // this.element.appendChild( this.page.dom() );
+        this.design = new Design();
+        this.element.appendChild( this.design.dom() );
 
         // component holder manager;
         this.chm = new DnrManager( { container: this.element } );

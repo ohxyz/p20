@@ -27,5 +27,5 @@ const ch2 = new Dnr( {
 } );
 
 
-app.mainPanel.addCompHolder( ch, ch2 );
+// app.mainPanel.addCompHolder( ch, ch2 );
 

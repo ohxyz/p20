@@ -1,25 +1,30 @@
 import { $c } from './utils';
+import { Box } from './box';
 
-class Page {
+class Design extends Box {
 
     constructor() {
 
-        this.element = $c( `
-            <div class="page">
-                <div class="page__row">
+        const element = $c( `
+            <div class="design">
+                <div class="design__row">
                     <div class="placeholder"></div>
                     <div class="placeholder"></div>
                     <div class="placeholder"></div>
                 </div>
-                <div class="page__row">
+                <div class="design__row">
                     <div class="placeholder"></div>
                     <div class="placeholder"></div>
                 </div>
-                <div class="page__row">
+                <div class="design__row">
                     <div class="placeholder"></div>
                 </div>
             </div>
         ` );
+
+        super( element );
+
+        this.element = element;
     }
 
     dom() {
@@ -28,4 +33,4 @@ class Page {
     }
 }
 
-export { Page };
+export { Design };
