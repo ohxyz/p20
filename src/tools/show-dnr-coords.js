@@ -30,7 +30,7 @@ class ShowDnrCoordsTool {
 
             if ( dnr ) {
 
-                contentOfMainPanel = `DNR r/t Main Panel X: ${ dnr.x }, Y: ${ dnr.y }`;
+                contentOfMainPanel = `DNR r/t Main Panel X: ${ dnr.offsetX }, Y: ${ dnr.offsetY }`;
                 
                 const relPos = Box.calcRelPos( dnr.dom(), this.mainPanel.canvas.dom() );
                 contentOfCanvas = `DNR r/t Canvas X: ${ relPos.left }, Y: ${ relPos.top }`;

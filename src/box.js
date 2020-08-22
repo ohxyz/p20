@@ -10,17 +10,13 @@ class Box {
         return window.getComputedStyle( this.element );
     }
 
-    rect() {
-
-        return this.element.getBoundingClientRect();
-    }
-
     inner() {
 
     }
 
     outer() {
 
+        return this.element.getBoundingClientRect();
     }
 
     /**

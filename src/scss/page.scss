@@ -1,0 +1,22 @@
+.page {
+
+    width: 500px;
+    height: 600px;
+    border: 5px solid #0000ff50;
+
+    &__row {
+
+        height: 150px;
+        border-bottom: 1px solid #00000050;
+        display: flex;
+        padding: 20px;
+        gap: 10px;
+    }
+}
+
+.placeholder {
+
+    flex-basis: 100px;
+    border: 1px dashed #00000070;
+    flex-grow: 1;
+}

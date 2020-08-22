@@ -2,6 +2,7 @@
 @import './dnr';
 @import './comp-panel';
 @import './tools/show-dnr-coords';
+@import './page';
 
 body {
 
@@ -34,6 +35,8 @@ body {
     right: 0;
     height: var(--tool-bar-height);
     z-index: 1000;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .prop-panel {
@@ -66,13 +69,4 @@ body {
     bottom: var(--status-bar-height);
     right: var(--prop-panel-width);
     overflow: auto;
-}
-
-.buttons {
-
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1001;
-    width: 300px;
 }

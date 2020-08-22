@@ -5,6 +5,8 @@ import { Dnr } from '../../src/dnr';
 
 /* Globals ****************************************************************************************/
 
+console.log( 'Test App' );
+
 const app = new App();
 
 const ch = new Dnr( {
@@ -26,4 +28,7 @@ const ch2 = new Dnr( {
     content: '<i>main 2</i>'
 } );
 
+
 app.mainPanel.addCompHolder( ch, ch2 );
+
+console.log( ch.rect(), ch.innerRect() );

@@ -4,6 +4,7 @@ import { Dnr } from './dnr';
 import { Canvas } from './canvas';
 import { Box } from './box';
 import { TextField } from 'p20c';
+import { Page } from './page';
 
 class MainPanel {
 
@@ -35,6 +36,9 @@ class MainPanel {
         this.canvas = new Canvas( { id: 'canvas', width: canvasWidth, height: canvasHeight } )
         this.element.appendChild( this.canvas.dom() );
 
+        // this.page = new Page();
+        // this.element.appendChild( this.page.dom() );
+
         // component holder manager;
         this.chm = new DnrManager( { container: this.element } );
 
@@ -50,8 +54,8 @@ class MainPanel {
 
         let { width, height } = args;
 
-        width = width ? width : parseFloat( this.element.style.width );
-        height = height ? height : parseFloat( this.element.style.width );
+        width = width ? width : parseFloat( this.style().width );
+        height = height ? height : parseFloat( this.style().height );
 
         this.element.style.width = width + 'px';
         this.element.style.height = height + 'px';
@@ -67,9 +71,14 @@ class MainPanel {
         }
     }
 
-    getRect() {
+    rect() {
 
         return this.element.getBoundingClientRect();
+    }
+
+    style() {
+
+        return window.getComputedStyle( this.element );
     }
 
     /**
@@ -79,7 +88,7 @@ class MainPanel {
      */
     positionCanvas() {
 
-        const selfRect = this.getRect();
+        const selfRect = this.rect();
 
         this.prevCanvasRect = this.canvas.dom().getBoundingClientRect();
 

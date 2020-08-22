@@ -62,37 +62,70 @@ class Dnr {
     /**
      * @returns {number} - Inner box's x relative to it's container
      */
-    get x() {
+    get offsetX() {
 
-        return parseFloat( this.element.style.left ) + this.getBorderLeftWidth();
+        const style = window.getComputedStyle( this.element );
+        const left = parseFloat( style.left );
+        const borderLeft = parseFloat( style.borderLeftWidth );
+
+        return left + borderLeft;
     }
 
-    set x( value ) {
+    set offsetX( value ) {
         
-        this.element.style.left = value - this.getBorderLeftWidth() + 'px';
+        const borderLeft = parseFloat( window.getComputedStyle(this.element).borderLeftWidth );
+        this.element.style.left = value - borderLeft + 'px';
     }
 
     /**
      * @returns {number} - Inner box's y relative to it's container
      */
-    get y() {
+    get offsetY() {
         
-        return parseFloat( this.element.style.top ) + this.getBorderTopWidth();
+        const style = window.getComputedStyle( this.element );
+        const top = parseFloat( style.top )
+        const borderTop = parseFloat( style.borderTopWidth );
+
+        return top + borderTop;
     }
 
-    set y( value ) {
+    set offsetY( value ) {
         
-        this.element.style.top = value - this.getBorderTopWidth() + 'px';
+        const borderTop = parseFloat( window.getComputedStyle(this.element).borderTopWidth );
+        this.element.style.top = value - borderTop + 'px';
     }
 
-    getBorderTopWidth() {
+    rect() {
 
-        return parseFloat( this.element.style.borderTopWidth );
+        return this.element.getBoundingClientRect();
     }
 
-    getBorderLeftWidth() {
+    style() {
 
-        return parseFloat( this.element.style.borderLeftWidth );
+        return window.getComputedStyle( this.element );
+    }
+
+    innerRect() {
+
+        const rect = this.element.getBoundingClientRect();
+
+        const { x, y, width, height, right, bottom } = rect;
+        const style = window.getComputedStyle( this.element );
+
+        const left = x + parseFloat( style.borderLeftWidth );
+        const top = y + parseFloat( style.borderTopWidth );
+
+        return {
+
+            x: left,
+            y: top,
+            width: parseFloat( style.width ),
+            height: parseFloat( style.height ),
+            left,
+            top,
+            right: right - parseFloat( style.borderRightWidth ),
+            bottom: bottom - parseFloat( style.borderBottomWidth )
+        };
     }
 
     getState() {
@@ -155,6 +188,7 @@ class Dnr {
             left: leftRect
         };
     }
+
 
     remove() {
 

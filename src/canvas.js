@@ -37,7 +37,7 @@ class Canvas {
      * Draw a rectangle using ImageData, with minium anti-aliasing effect
      * https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createImageData
      */
-    drawRect( x, y, width, height, alter=[1, 0], color="#000000" ) {
+    drawRectByImageData( x, y, width, height, alter=[1, 0], color="#000000" ) {
 
         const numOfSolidPoints = alter[0] < 1 ? 1 : alter[0];
         const numOfEmptyPoints = alter[1] < 0 ? 0 : alter[1];
@@ -80,17 +80,32 @@ class Canvas {
         this.context.putImageData( imageData, x, y );
     }
 
+    update( args = {} ) {
+
+        let { width, height } = args;
+
+        width = width ? width : parseFloat( this.element.style.width );
+        height = height ? height : parseFloat( this.element.style.width );
+
+        this.width = width;
+        this.height = height;
+        this.element.setAttribute( 'width', width );
+        this.element.setAttribute( 'height', height );
+        this.element.style.width = width + 'px';
+        this.element.style.height = height + 'px';
+    }
+
     /**
      * Draw a vertical line with minium anti-aliasing effect by ImageData
      */
     drawVLine( x, y, length, dash, color ) {
 
-        this.drawRect( x, y, 1, length, dash, color );
+        this.drawRectByImageData( x, y, 1, length, dash, color );
     }
 
     drawHLine( x, y, length, dash, color ) {
 
-        this.drawRect( x, y, length, 1, dash, color );
+        this.drawRectByImageData( x, y, length, 1, dash, color );
     }
 
     drawGridLines( cellSize=20, color='#000000' ) {
