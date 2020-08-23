@@ -23,9 +23,8 @@ class CompPanelItem {
 
     handleDragStart( event ) {
 
-        // console.log( 'comp drag start' );
         event.dataTransfer.effectAllowed = "copyMove";
-
+        
         const dataString = JSON.stringify( { type: 'comp-panel-item', name: this.name } )
 
         event.dataTransfer.setData( 'text/plain', dataString );

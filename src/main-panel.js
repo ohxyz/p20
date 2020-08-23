@@ -38,7 +38,6 @@ class MainPanel {
 
         this.design = new Design();
         this.element.appendChild( this.design.dom() );
-
         // component holder manager;
         this.chm = new DnrManager( { container: this.element } );
 
@@ -185,7 +184,7 @@ class MainPanel {
             // Note: Don't use offsetX, offsetY 
             // Because curor can move on main panel's child element, e.g canvas
             // In this case, offsetX and offsetY are related to canvas, NOT main panel.
-            const mainPanelRect = this.getRect();
+            const mainPanelRect = this.rect();
             const x = event.clientX - mainPanelRect.x;
             const y = event.clientY - mainPanelRect.y;
 

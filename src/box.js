@@ -19,13 +19,10 @@ class Box {
      * Exclude borders
      */
     innerRect() {
-
-        const rect = this.#element.getBoundingClientRect();
-
-        const { x, y, width, height, right, bottom } = rect;
         
-        const borders = this.borders();
+        const { x, y, width, height, right, bottom } = this.#element.getBoundingClientRect();
 
+        const borders = this.borders();
         const left = x + borders.left;
         const top = y + borders.top;
 
@@ -93,6 +90,8 @@ class Box {
         const myRect = this.innerRect();
         const myWidth = myRect.width;
         const myHeight = myRect.height;
+
+        console.log( myWidth )
 
         this.position( (pWidth - myWidth)/2, (pHeight - myHeight)/2 );
     }

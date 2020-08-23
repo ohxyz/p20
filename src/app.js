@@ -14,7 +14,7 @@ class App {
     statusBar;
     propPanel;
 
-    constructor( ) {
+    constructor() {
 
         this.element = $q( '#app' );
         this.mainContainerElement = $c( '<div class="main-container">' );
@@ -24,6 +24,9 @@ class App {
         this.toolBar = new ToolBar( { mainPanel: this.mainPanel } );
         this.statusBar = new StatusBar( { mainPanel: this.mainPanel } );
         this.propPanel = new PropPanel( { mainPanel: this.mainPanel } );
+    }
+
+    init() {
 
         $a( this.element, 
             this.toolBar.dom(), 
@@ -33,18 +36,13 @@ class App {
             $a( this.mainContainerElement, this.mainPanel.dom() )
         );
 
-        this.mainPanel.positionCanvas();
+        this.mainPanel.design.center();
 
-        window.addEventListener( 'resize', this.handleResize.bind(this) );
+        // window.addEventListener( 'resize', this.handleResize.bind(this) );
     }
 
     handleResize() {
         
-    }
-
-    dom() {
-
-        return this.element;
     }
 }
 

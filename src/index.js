@@ -3,9 +3,8 @@ import { App } from './app';
 import { $q } from './utils';
 import { Dnr } from './dnr';
 
-/* Globals ****************************************************************************************/
-
 const app = new App();
+app.init();
 
 const ch = new Dnr( {
 
@@ -25,7 +24,6 @@ const ch2 = new Dnr( {
     backgroundColor: '#00ffff30',
     content: '<i>main 2</i>'
 } );
-
 
 // app.mainPanel.addCompHolder( ch, ch2 );
 
